@@ -1,63 +1,47 @@
+"use client";
 
-"use client"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, Phone } from "lucide-react";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useMobile } from "@/hooks/use-mobile"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 // Navigation items with dropdown support
 const navigationItems = [
   { title: "Home", href: "/" },
-  {
-    title: "Services",
-    href: "/services",
-    dropdown: [
-      { title: "Web Development", href: "/services/web-development" },
-      { title: "Mobile Apps", href: "/services/mobile-apps" },
-      { title: "UI/UX Design", href: "/services/design" },
-    ],
-  },
-  {
-    title: "About",
-    href: "/about",
-    dropdown: [
-      { title: "Our Team", href: "/about/team" },
-      { title: "Our Story", href: "/about/story" },
-      { title: "Careers", href: "/about/careers" },
-    ],
-  },
-  { title: "Portfolio", href: "/portfolio" },
-  { title: "Blog", href: "/blog" },
-  { title: "Contact", href: "/contact" },
-]
+  { title: "Commercial Roofing Services", href: "/commercial-services" },
+  { title: "Residential Roofing Services", href: "/residential-services" },
+  { title: "About Borrelli Roofing", href: "/about-us" },
+];
 
 export default function Navbar() {
-  const pathname = usePathname()
-  const isMobile = useMobile()
-  const [isScrolled, setIsScrolled] = React.useState(false)
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = React.useState(false);
 
   // Handle scroll effect
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
+      setIsScrolled(window.scrollY > 10);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-white",
+        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-white"
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -72,52 +56,31 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-6">
             {navigationItems.map((item) => (
               <React.Fragment key={item.title}>
-                {item.dropdown ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className={cn(
-                          "text-base font-medium transition-colors hover:text-primary",
-                          pathname === item.href ? "text-primary" : "text-foreground",
-                        )}
-                      >
-                        {item.title}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="center" className="w-48">
-                      {item.dropdown.map((dropdownItem) => (
-                        <DropdownMenuItem key={dropdownItem.title} asChild>
-                          <Link
-                            href={dropdownItem.href}
-                            className={cn("w-full", pathname === dropdownItem.href ? "font-medium text-primary" : "")}
-                          >
-                            {dropdownItem.title}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "text-base font-medium transition-colors hover:text-primary",
-                      pathname === item.href ? "text-primary" : "text-foreground",
-                    )}
-                  >
-                    {item.title}
-                  </Link>
-                )}
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "text-base font-medium transition-colors hover:text-primary",
+                    pathname === item.href ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  {item.title}
+                </Link>
               </React.Fragment>
             ))}
           </nav>
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button>Get Started</Button>
+            <Link href="tel:+1234567890">
+              <Button
+                variant="secondary"
+                className="flex items-center space-x-2"
+              >
+                <Phone className="h-4 w-4" />
+                <span>Call Us</span>
+              </Button>
+            </Link>
           </div>
-
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
@@ -128,44 +91,34 @@ export default function Navbar() {
             <SheetContent side="right" className="w-[300px] sm:w-[350px]">
               <div className="flex flex-col px-4 space-y-6 pt-6">
                 {navigationItems.map((item) => (
-                  <div key={item.title} className="space-y-3">
-                    {item.dropdown ? (
-                      <>
-                        <div className="font-medium text-lg">{item.title}</div>
-                        <div className="ml-4 flex flex-col space-y-2">
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.title}
-                              href={dropdownItem.href}
-                              className={cn(
-                                "text-base transition-colors hover:text-primary",
-                                pathname === dropdownItem.href ? "font-medium text-primary" : "text-muted-foreground",
-                              )}
-                            >
-                              {dropdownItem.title}
-                            </Link>
-                          ))}
-                        </div>
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={cn(
-                          "text-lg font-medium transition-colors hover:text-primary",
-                          pathname === item.href ? "text-primary" : "text-foreground",
-                        )}
-                      >
-                        {item.title}
-                      </Link>
-                    )}
-                  </div>
+                  <React.Fragment key={item.title}>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "text-base font-medium transition-colors hover:text-primary",
+                        pathname === item.href
+                          ? "text-primary"
+                          : "text-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </Link>
+                  </React.Fragment>
                 ))}
-                <Button className="mt-4 w-full">Get Started</Button>
+                <Link href="tel:+1234567890">
+                  <Button
+                    variant="secondary"
+                    className="flex items-center space-x-2"
+                  >
+                    <Phone className="h-4 w-4" />
+                    <span>Call Us</span>
+                  </Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
         </div>
       </div>
     </header>
-  )
+  );
 }
