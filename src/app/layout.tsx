@@ -1,11 +1,12 @@
 import "./globals.css";
+import { Toaster } from "sonner";
 
 // You can change this to your custom favicon icon, title and description
 export const metadata = {
-  title: 'Create Next Base',
-  description: 'A production-ready Next.js starter template crafted by ONTONIM to accelerate your web development workflow. This boilerplate combines modern technologies with enterprise-grade architecture to help you build performant, scalable applications faster.',
+  title: "Smarter Roofing Services",
+  description: `Houston’s Trusted Roofing Partner for Residential & Commercial Projects`,
   icons: {
-    icon: 'https://i.ibb.co/BHMGGW7z/ontonim.png',
+    icon: "/Borrelli_Logo.svg",
   },
 };
 
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html>
       <body>
         <main>{children}</main>
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );
