@@ -7,13 +7,8 @@ import { Menu, Phone } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from "next/image";
 
 // Navigation items with dropdown support
 const navigationItems = [
@@ -41,15 +36,22 @@ export default function Navbar() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-white"
+        isScrolled ? "bg-[#FAFAFA] backdrop-blur-sm shadow-sm" : "bg-black/10"
       )}
     >
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex h-16 items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 py-2">
+        <div className="flex  items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full bg-primary"></div>
-            <span className="text-xl font-bold">Logo Here</span>
+          <Link
+            href="/"
+            className="flex items-center space-x-2 w-[96px] h-[84px]"
+          >
+            <Image
+              src="/Borrelli_Logo.svg"
+              alt="Borrelli Logo"
+              width={150}
+              height={50}
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -74,10 +76,10 @@ export default function Navbar() {
             <Link href="tel:+1234567890">
               <Button
                 variant="secondary"
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-[#0F3D68] text-white hover:bg-[#0F3D68]/90 focus:ring-4 focus:ring-[#0F3D68]/50 py-4 md:px-5 lg:px-6 cursor-pointer h-12 w-[134px]"
               >
                 <Phone className="h-4 w-4" />
-                <span>Call Us</span>
+                <span className="text-base font-bold">Call Now</span>
               </Button>
             </Link>
           </div>
