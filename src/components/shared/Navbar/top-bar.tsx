@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa6";
-import { BsEmojiAngryFill, BsGlobe } from "react-icons/bs";
+import { BsGlobe } from "react-icons/bs";
 import { MdOutlineMailOutline } from "react-icons/md";
 
 export default function Topbar() {

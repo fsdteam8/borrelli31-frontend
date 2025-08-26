@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Check } from "lucide-react";
-import { useState } from "react";
+import { Check, X } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface FormData {
   fullName: string;
@@ -25,12 +25,14 @@ interface RoofingInquiryModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   onSubmit?: (data: FormData) => Promise<void> | void;
+  preselectedService?: string;
 }
 
 export default function RoofingInquiryModal({
   isOpen = true,
   onClose = () => {},
   onSubmit,
+  preselectedService,
 }: RoofingInquiryModalProps) {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -41,6 +43,12 @@ export default function RoofingInquiryModal({
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (preselectedService && isOpen) {
+      setFormData((prev) => ({ ...prev, service: preselectedService }));
+    }
+  }, [preselectedService, isOpen]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
@@ -113,35 +121,29 @@ export default function RoofingInquiryModal({
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: "url(/images/image7.jpg)",
+              backgroundImage: "url('/images/image7.jpg')",
             }}
           >
             <div className="absolute inset-0 bg-black/40" />
           </div>
 
           {/* Close Button */}
-          {/* <button
+          <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+            className="absolute top-4 right-4 z-20 bg-white/50 hover:bg-white/30 rounded-full p-2 cursor-pointer transition-colors"
           >
-            <X className="w-5 h-5 text-white" />
-          </button> */}
+            <X className="w-5 h-5 text-red-500" />
+          </button>
 
           {/* Content Container */}
-          <div className="relative z-10 flex flex-col lg:flex-row w-full min-h-screen container mx-auto lg:min-h-0 lg:h-screen overflow-y-auto lg:overflow-hidden">
+          <div className="relative z-10 flex flex-col lg:flex-row w-full min-h-[90vh] container mx-auto lg:min-h-0 lg:h-screen overflow-y-auto lg:overflow-hidden">
             {/* Left Side - Title and Benefits */}
             <div className="flex-2 p-4 pt-16 flex flex-col justify-center">
               <div className="">
                 {/* Main Title */}
-                {/* <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 lg:mb-6 leading-tight">
-                  Get Your Free Roof Assessment
-                </h1> */}
-                <DialogTitle className=" text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 lg:mb-6 leading-tight">
-                  Get Your Free Roof Assessment
+                <DialogTitle className=" text-3xl md:text-4xl lg:text-5xl cursor-pointer font-bold text-white mb-4 lg:mb-6 leading-tight">
+                  Get Your Free Roof Assessment Inquiry Form Section
                 </DialogTitle>
-                <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-white mb-4 lg:mb-6 leading-tight">
-                  Inquiry Form Section
-                </h2>
 
                 <p className="text-gray-200 text-base lg:text-lg mb-6 lg:mb-8 leading-relaxed max-w-[563px] font-inter tracking-[0%]">
                   Fill out the form and our team will get back to you within 24
@@ -160,7 +162,7 @@ export default function RoofingInquiryModal({
                         <Check className="w-3 h-3 lg:w-4 lg:h-4 text-white" />
                       </div>
                       <span className="text-[#000000] text-sm lg:text-base leading-relaxed">
-                        No-obligation assessment of your roof's condition
+                        No-obligation assessment of your roof&apos;s condition
                       </span>
                     </div>
 
@@ -308,21 +310,23 @@ export default function RoofingInquiryModal({
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
                         <SelectContent className="py-3">
-                          <SelectItem value="inspection">
-                            Free Drone Inspection
+                          <SelectItem value="drone-inspection">
+                            Free Drone Inspection & Estimate
                           </SelectItem>
-                          <SelectItem value="repair">Roof Repair</SelectItem>
-                          <SelectItem value="replacement">
-                            Roof Replacement
+                          <SelectItem value="sale-ready-certification">
+                            Sale-Ready Roof Certification
                           </SelectItem>
-                          <SelectItem value="maintenance">
-                            Roof Maintenance
+                          <SelectItem value="commercial-installation">
+                            Commercial Roof Installation
                           </SelectItem>
-                          <SelectItem value="certification">
-                            Sale-Ready Certification
+                          <SelectItem value="residential-installation">
+                            Residential Roof Installation
                           </SelectItem>
-                          <SelectItem value="storm-damage">
-                            Storm Damage Assessment
+                          <SelectItem value="residential-repairs">
+                            Residential Repairs & Gutters
+                          </SelectItem>
+                          <SelectItem value="insurance-claim-support">
+                            Insurance Photos & Claim Support
                           </SelectItem>
                         </SelectContent>
                       </Select>
