@@ -50,8 +50,9 @@ export default function HomeHero() {
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Houston's Trusted <span className="text-primary">Roofing</span>{" "}
-              Partner for Residential & Commercial Projects
+              Houston&apos;s Trusted
+              <span className="text-primary">Roofing</span> Partner for
+              Residential & Commercial Projects
             </h1>
 
             {/* Subtext */}
