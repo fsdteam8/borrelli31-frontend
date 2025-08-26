@@ -148,10 +148,10 @@ export default function GetInTouch() {
               Why Choose Borrelli Roofing?
             </h2>
             <p className="text-[#000] text-sm">
-              When you work with us, you're working directly with the owner.
+              When you work with us, you&apos;re working directly with the owner.
               Constantino personally oversees every project to ensure the
               highest quality standards are met. <br /> <br />
-              We’re committed to providing exceptional service, transparent
+              We&apos;re committed to providing exceptional service, transparent
               communication, and lasting results for every client.
             </p>
           </div>
