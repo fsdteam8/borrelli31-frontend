@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -24,6 +26,9 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +38,19 @@ export default function Login() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Form Data:", values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // console.log("Form Data:", values);
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      setServerError("Invalid email or password");
+    } else {
+      router.push("/dashboard");
+    }
   }
 
   return (
@@ -131,6 +147,10 @@ export default function Login() {
                   Forgot password?
                 </a>
               </div>
+              {/* Server error */}
+              {serverError && (
+                <p className="text-sm text-red-600">{serverError}</p>
+              )}
 
               {/* Login Button */}
               <Button

@@ -1,12 +1,14 @@
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Manrope } from "next/font/google";
+import Providers from "@/Providers/provider";
+import MainProviders from "@/Providers/MainProviders";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   weight: ["400", "500", "600", "700"],
-  display: "swap", // ensures text shows instantly with fallback
+  display: "swap",  
 });
 
 // You can change this to your custom favicon icon, title and description
@@ -26,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable}`}>
-        <main>{children}</main>
+        <MainProviders>
+          <Providers> {children} </Providers>
+        </MainProviders>
         <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
