@@ -2,6 +2,7 @@
 
 import ServiceCard from "@/components/shared/ServiceCard/ServiceCard";
 import HomeHero from "./home-hero";
+import WhyChooseBorrelliRoofing from "./WhyChooseBorrelliRoofing/WhyChooseBorrelliRoofing";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       {/* Hero Hero Secetion */}
       <HomeHero />
       <ServiceCard />
+      <WhyChooseBorrelliRoofing />
     </div>
   );
 }
