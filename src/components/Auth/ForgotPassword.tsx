@@ -15,12 +15,18 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPassword } from "@/lib/api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react"; // ✅ spinner icon
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
 });
 
 export default function ForgotPassword() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,8 +34,25 @@ export default function ForgotPassword() {
     },
   });
 
+  // Tanstack mutation
+  const mutation = useMutation({
+    mutationFn: (email: string) => forgotPassword(email),
+    onSuccess: (data) => {
+      toast.success("🎉 Congratulations! A 6-digit reset code has been sent to your email.");
+      setTimeout(() => {
+        router.push("/enter-otp");
+      }, 2000);
+    },
+    onError: () => {
+      toast.error(`❌ ${"Something went wrong"}`);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Forgot Password Data:", values);
+    // ✅ Save email to localStorage
+    localStorage.setItem("email", values.email);
+
+    mutation.mutate(values.email);
   }
 
   return (
@@ -84,9 +107,17 @@ export default function ForgotPassword() {
               {/* Button */}
               <Button
                 type="submit"
-                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-sm text-base font-semibold shadow-md cursor-pointer"
+                disabled={mutation.isPending}
+                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-sm text-base font-semibold shadow-md cursor-pointer flex items-center justify-center gap-2"
               >
-                Send OTP
+                {mutation.isPending ? (
+                  <>
+                    <Loader2 className="animate-spin w-5 h-5" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send OTP"
+                )}
               </Button>
             </form>
           </Form>

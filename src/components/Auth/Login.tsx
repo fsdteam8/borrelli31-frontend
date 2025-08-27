@@ -18,6 +18,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 export default function Login() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,7 +41,8 @@ export default function Login() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log("Form Data:", values);
+    setIsLoading(true); // start loading
+
     const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -47,9 +50,15 @@ export default function Login() {
     });
 
     if (res?.error) {
+      toast.error("❌ Invalid email or password. Please try again.");
+      setIsLoading(false); 
       setServerError("Invalid email or password");
     } else {
-      router.push("/dashboard");
+      toast.success("🎉 Login successful! Welcome back.");
+
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2000);
     }
   }
 
@@ -155,9 +164,14 @@ export default function Login() {
               {/* Login Button */}
               <Button
                 type="submit"
-                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-sm text-base font-semibold shadow-md cursor-pointer"
+                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-sm text-base font-semibold shadow-md cursor-pointer flex justify-center items-center"
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? (
+                  <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
           </Form>

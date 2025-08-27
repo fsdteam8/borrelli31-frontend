@@ -1,10 +1,10 @@
-import EnterOTP from '@/components/Auth/EnterOTP'
+import Message from '@/components/Dashboard/Message'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-      <EnterOTP />
+        <Message />
     </div>
   )
 }
