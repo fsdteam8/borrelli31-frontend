@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { resetPassword } from "@/lib/api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
+// Validation Schema
 const formSchema = z
   .object({
     newPassword: z.string().min(6, "Password must be at least 6 characters"),
@@ -40,17 +44,41 @@ export default function ResetPassword() {
   const [open, setOpen] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const router = useRouter();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Reset Password Successful ✅");
-    console.log("New Password:", values.newPassword);
-    setOpen(true);
+  // 🔹 Load email from localStorage
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail) {
+      try {
+        setEmail(JSON.parse(storedEmail));
+      } catch {
+        setEmail(storedEmail);
+      }
+    }
+  }, []);
+
+  // 🔹 Submit Handler
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      await resetPassword(email, values.newPassword);
+      toast.success("🎉 Password Changed Successfully!");
+      localStorage.removeItem("email");
+      setOpen(true);
+    } catch   {
+      toast.error("❌ Failed to reset password");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50 px-4">
       <div className="relative w-full max-w-xl">
-        {/* Logo outside card */}
+        {/* Logo */}
         <div className="flex justify-center -mt-20 mb-6">
           <Image
             src="/Borrelli_Logo.svg"
@@ -73,10 +101,7 @@ export default function ResetPassword() {
 
           {/* Form */}
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {/* New Password */}
               <FormField
                 control={form.control}
@@ -94,7 +119,11 @@ export default function ResetPassword() {
                       className="absolute right-3 top-[38px] cursor-pointer text-gray-500"
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
-                      {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showNewPassword ? (
+                        <EyeOff size={20} />
+                      ) : (
+                        <Eye size={20} />
+                      )}
                     </span>
                   </FormItem>
                 )}
@@ -132,9 +161,17 @@ export default function ResetPassword() {
               {/* Continue Button */}
               <Button
                 type="submit"
-                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-xl text-base font-semibold shadow-md cursor-pointer"
+                disabled={loading}
+                className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-12 w-full rounded-xl text-base font-semibold shadow-md flex items-center justify-center cursor-pointer"
               >
-                Continue
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  "Continue"
+                )}
               </Button>
             </form>
           </Form>
@@ -162,7 +199,10 @@ export default function ResetPassword() {
             <DialogFooter>
               <Button
                 className="bg-[#0F3D68] hover:bg-[#0c2f50] text-white h-10 w-full rounded-md text-base font-semibold shadow-md cursor-pointer"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  router.replace("/login");
+                }}
               >
                 Back to Login
               </Button>
