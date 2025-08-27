@@ -15,7 +15,7 @@ const navigationItems = [
   { title: "Home", href: "/" },
   { title: "Commercial Roofing Services", href: "/commercial-services" },
   { title: "Residential Roofing Services", href: "/residential-services" },
-  { title: "About Borrelli Roofing", href: "/about-us" },
+  { title: "About Borrelli Roofing", href: "/about-borrelli-roofing" },
 ];
 
 export default function Navbar() {

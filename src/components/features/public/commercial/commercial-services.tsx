@@ -1,70 +1,72 @@
+"use client"
+
 import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
 import Image from "next/image";
 import React, { useState } from "react";
 
 const services = [
   {
-    id: "drone-inspection",
-    title: "Free Drone Inspections & Estimates",
-    description: "Roof assessments without ladder climbing.",
-    button: "Get a Free Drone Inspection & Estimate",
-    imgSrc: "/images/image1.png",
-    alt: "Drone inspection",
-    serviceValue: "drone-inspection",
-  },
-  {
-    id: "sale-ready",
-    title: "Sale-Ready Roof Certifications",
-    description:
-      "Professional documentation for real estate transactions and peace of mind.",
-    button: "Get a Sale-Ready Roof Certification",
-    imgSrc: "/images/image2.png",
-    alt: "Roof certification",
-    serviceValue: "sale-ready-certification",
-  },
-  {
-    id: "commercial",
-    title: "Commercial Roof Installations",
-    description:
-      "Expert installation for businesses, warehouses, and commercial properties.",
+    id: "new-roof-installation",
+    title: "New Roof Installation",
+    description: "TPO, PVC, EPDM, and other commercial-grade materials installed by certified professionals.",
     button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image3.png",
-    alt: "Commercial Roof Installations",
-    serviceValue: "commercial-installation",
+    imgSrc: "/images/cs/cs1.png",
+    alt: "New Roof Installation",
+    serviceValue: "new-roof-installation",
   },
   {
-    id: "residential",
-    title: "Residential Roof Installations",
+    id: "roof-replacement",
+    title: "Roof Replacement",
     description:
-      "Quality materials and craftsmanship for homes of all sizes and styles.",
+      "Full tear-off or TPO overlay options to suit your building's needs and budget.",
     button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image4.png",
-    alt: "Residential Roof Installations",
-    serviceValue: "residential-installation",
+    imgSrc: "/images/cs/cs2.png",
+    alt: "Roof Replacement",
+    serviceValue: "roof-replacement",
   },
   {
-    id: "repairs",
-    title: "Residential Repairs & Gutters",
+    id: "roof-coating",
+    title: "Roof Coating & Restoration",
     description:
-      "Prompt repair services and gutter solutions to protect your home.",
+      "Silicone or acrylic coating solutions to extend roof life and improve energy efficiency.",
     button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image5.png",
-    alt: "Residential Repairs & Gutters",
-    serviceValue: "residential-repairs",
+    imgSrc: "/images/cs/cs3.png",
+    alt: "Roof Coating & Restoration",
+    serviceValue: "roof-coating",
   },
   {
-    id: "insurance",
-    title: "Insurance Photos & Claim Support",
+    id: "insurance-claim-support",
+    title: "Insurance Claim Support",
     description:
-      "Documentation and assistance with insurance claims after storm damage.",
-    button: "Get a Sale-Ready Roof Certification",
-    imgSrc: "/images/image6.png",
-    alt: "Get Insurance Claim Support",
+      "Comprehensive documentation and insurance liaison services for damage claims.",
+    button: "Get a Free Inspection & Estimate",
+    imgSrc: "/images/cs/cs4.png",
+    alt: "Insurance Claim Support",
     serviceValue: "insurance-claim-support",
+  },
+  {
+    id: "drone-inspections",
+    title: "Drone Inspections & Imaging",
+    description:
+      "High-resolution imaging for rapid, safe issue detection",
+    button: "Get a Free Inspection & Estimate",
+    imgSrc: "/images/cs/cs5.png",
+    alt: "Drone Inspections & Imaging",
+    serviceValue: "drone-inspections",
+  },
+  {
+    id: "storm-damage-assessments",
+    title: "Storm Damage Assessments",
+    description:
+      "Rapid response evaluations after severe weather events to prevent further damage.",
+    button: "Get a Sale-Ready Roof Certification",
+    imgSrc: "/images/cs/cs6.png",
+    alt: "Storm Damage Assessments",
+    serviceValue: "storm-damage-assessments",
   },
 ];
 
-export default function ServiceCard() {
+export default function CommercialServices() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
 
@@ -79,14 +81,14 @@ export default function ServiceCard() {
   };
 
   return (
-    <section className="bg-[#F4F4F4]">
-      <div className="text-center mb-10 pt-20 px-4">
+    <section className="bg-[#F4F4F4] py-8 lg:py-20">
+      <div className="text-center mb-10 px-4">
         <h2 className="text-4xl sm:text-5xl font-bold text-[#0B2F6B]">
-          Our Roofing Services
+          Our Commercial Roofing Services
         </h2>
-        <p className="text-[#2F2F2F] text-base sm:text-lg mt-2">
-          Comprehensive roofing solutions for residential and commercial
-          properties in Houston <br /> and surrounding areas.
+        <p className="text-[#2F2F2F] text-base sm:text-lg mt-3 max-w-4xl mx-auto">
+          Comprehensive solutions for every commercial roofing need, with
+          transparent pricing to help you make informed decisions.
         </p>
       </div>
 
@@ -118,7 +120,7 @@ export default function ServiceCard() {
             </div>
           </div>
         ))}
-      </div> 
+      </div>
 
       {/* Modal for inquiry form */}
       <RoofingInquiryModal
