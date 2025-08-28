@@ -2,7 +2,18 @@ import RoofingInquiryModal from "@/components/features/public/Home/roofing-inqui
 import Image from "next/image";
 import React, { useState } from "react";
 
-const services = [
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  button: string;
+  imgSrc: string;
+  alt: string;
+  serviceValue: string;
+}
+
+
+const services: Service[] = [
   {
     id: "drone-inspection",
     title: "Free Drone Inspections & Estimates",
@@ -64,7 +75,7 @@ const services = [
   },
 ];
 
-
+ 
 
 export default function ServiceCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,6 +86,7 @@ export default function ServiceCard() {
     setIsModalOpen(true);
   };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = async (data: any) => {
     console.log("Form submission:", data);
     // Add your custom API call or processing logic here
@@ -120,7 +132,7 @@ export default function ServiceCard() {
             </div>
           </div>
         ))}
-      </div> 
+      </div>
 
       {/* Modal for inquiry form */}
       <RoofingInquiryModal

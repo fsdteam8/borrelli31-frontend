@@ -6,13 +6,21 @@ import RoofingInquiryModal from "./roofing-inquiry-modal";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-export default function HomeHero() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+// --- Types ---
+interface FormData {
+  fullName: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  selectedService?: string;
+}
 
-  const handleFormSubmit = async (data: any) => {
-    // Custom logic for form submission
+export default function HomeHero() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleFormSubmit = async (data: FormData) => {
     console.log("Custom form submission:", data);
-    // Add your custom API call or processing logic here
+    // Add your API call or processing logic here
   };
 
   return (
@@ -38,7 +46,7 @@ export default function HomeHero() {
               <div className="w-8 h-8 rounded flex items-center justify-center">
                 <Image
                   src={"/images/sparkle-icon.svg"}
-                  alt=""
+                  alt="Company Logo"
                   width={24}
                   height={24}
                 />
@@ -50,8 +58,7 @@ export default function HomeHero() {
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Houston&apos;s Trusted
-              <span className="text-primary">Roofing</span> Partner for
+              Houston&apos;s Trusted <span className="text-primary">Roofing</span> Partner for
               Residential & Commercial Projects
             </h1>
 
@@ -64,7 +71,7 @@ export default function HomeHero() {
             {/* CTA Button */}
             <Button
               onClick={() => setIsModalOpen(true)}
-              className="bg-primary cursor-pointer hover:primary h-[56px] text-white !px-8 py-4 text-lg font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2"
+              className="bg-primary cursor-pointer hover:bg-primary-dark h-[56px] text-white !px-8 py-4 text-lg font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2"
             >
               Get a Free Drone Inspection & Estimate
               <FaArrowRightLong className="w-5 h-5" />
@@ -73,6 +80,7 @@ export default function HomeHero() {
         </div>
       </section>
 
+      {/* Inquiry Modal */}
       <RoofingInquiryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

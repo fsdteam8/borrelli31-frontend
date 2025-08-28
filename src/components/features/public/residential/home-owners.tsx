@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Drone, FileText, MoveRight } from "lucide-react";
 import React from "react";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 export default function HomeOwners() {
   return (
@@ -29,7 +28,7 @@ export default function HomeOwners() {
               <CardContent className="lg:space-y-10 pb-6 pr-16">
                 <p className="lg:text-lg text-sm">
                   Our cutting-edge drone technology provides a detailed
-                  assessment of your roof's condition without the need for
+                  assessment of your roof&apos;s condition without the need for
                   ladder climbs or walking on your roof. This non-invasive
                   approach gives you:
                 </p>

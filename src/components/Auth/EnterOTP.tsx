@@ -76,7 +76,7 @@ export default function EnterOTP() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      const res = await verifyOtpCode(email, values.otp);
+        await verifyOtpCode(email, values.otp);
       toast.success("🎉 OTP Verified Successfully!");
       setTimeout(() => {
         router.push("/reset-password");

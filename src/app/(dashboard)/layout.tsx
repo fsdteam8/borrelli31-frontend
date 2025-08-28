@@ -1,6 +1,5 @@
 import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
 import "../globals.css";
-import Navbar from "@/components/shared/Navbar/Navbar";
 import DashboardHeader from "@/components/Dashboard/DashboardHeader";
 export default function DashboardLayout({
   children,

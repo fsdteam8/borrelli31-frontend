@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,9 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Star } from "lucide-react";
-import { createReview, getApprovedReviews } from "@/lib/api";
 import { toast } from "sonner";
-import { Review } from "./reviews-display";
+import { createReview, getApprovedReviews } from "@/lib/api";
+
+export interface Review {
+  _id: string;
+  fullName: string;
+  email: string;
+  rating: number;
+  description: string;
+  createdAt: string;
+}
 
 interface ReviewFormData {
   fullName: string;
@@ -34,7 +40,7 @@ export function ReviewForm() {
     rating: 0,
     description: "",
   });
-  const [hoveredRating, setHoveredRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState<number>(0);
 
   const queryClient = useQueryClient();
 
@@ -45,12 +51,12 @@ export function ReviewForm() {
       setFormData({ fullName: "", email: "", rating: 0, description: "" });
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
     },
-    onError: (error: any) => {
-      toast.error(error.message);
+    onError: ( ) => {
+      toast.error( "Failed to submit review");
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData.rating === 0) {
       toast.warning("Please select a rating");
@@ -65,90 +71,58 @@ export function ReviewForm() {
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-  const { data, isLoading, error } = useQuery({
+
+  const { data } = useQuery<{ data: { items: Review[] } }>({
     queryKey: ["reviews"],
     queryFn: getApprovedReviews,
   });
 
-  if (isLoading) {
-    return (
-      <div className="container grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-4 bg-gray-200 rounded mb-4"></div>
-              <div className="h-16 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-600">Unable to load reviews at this time.</p>
-      </div>
-    );
-  }
-
-  const reviews = data?.data?.items || [];
-
-  if (reviews.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-600">No reviews available yet.</p>
-      </div>
-    );
-  }
+  const reviews: Review[] = data?.data?.items || [];
 
   // Calculate average rating
   const averageRating =
-    reviews.reduce((sum: number, review: Review) => sum + review.rating, 0) /
-    reviews.length;
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0;
+
   const ratingCounts = [1, 2, 3, 4, 5].map(
-    (rating) =>
-      reviews.filter((review: Review) => review.rating === rating).length
+    (rating) => reviews.filter((r) => r.rating === rating).length
   );
 
   return (
     <section className="py-8 lg:py-20">
-      <div className="container grid grid-cols-2 gap-8 items-center">
+      <div className="container grid md:grid-cols-2 gap-8 items-start">
+        {/* Review Form */}
         <Card className="border-none shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl">Reviews Form</CardTitle>
-            <CardDescription className="text-center sr-only">
-              We'd love to hear about your experience with our roofing services
+            <CardDescription className="sr-only">
+              We&apos;sd love to hear about your experience with our roofing services
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Input
-                    className="h-10"
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      handleInputChange("fullName", e.target.value)
-                    }
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    className="h-12"
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input
+                  id="fullName"
+                  value={formData.fullName}
+                  onChange={(e) => handleInputChange("fullName", e.target.value)}
+                  required
+                  className="h-10"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  required
+                  className="h-12"
+                />
               </div>
 
               <div className="space-y-2">
@@ -179,7 +153,7 @@ export function ReviewForm() {
                 <Label htmlFor="description">Your Review</Label>
                 <Textarea
                   id="description"
-                  placeholder="Tell us about your experience with our roofing services..."
+                  placeholder="Tell us about your experience..."
                   value={formData.description}
                   onChange={(e) =>
                     handleInputChange("description", e.target.value)
@@ -189,16 +163,14 @@ export function ReviewForm() {
                 />
               </div>
 
-              <Button
-                type="submit"
-                className=""
-                disabled={mutation.isPending}
-              >
+              <Button type="submit" disabled={mutation.isPending}>
                 {mutation.isPending ? "Submitting..." : "Submit Review"}
               </Button>
             </form>
           </CardContent>
         </Card>
+
+        {/* Reviews Display */}
         <div className="space-y-6">
           <div className="text-center md:text-left space-y-4">
             <h3 className="text-3xl font-bold">Reviews</h3>
@@ -239,7 +211,7 @@ export function ReviewForm() {
                           : 0
                       }%`,
                     }}
-                  ></div>
+                  />
                 </div>
                 <span className="text-sm text-gray-600 w-8 pl-2">
                   {ratingCounts[rating - 1]}

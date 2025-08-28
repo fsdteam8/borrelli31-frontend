@@ -4,7 +4,26 @@ import RoofingInquiryModal from "@/components/features/public/Home/roofing-inqui
 import Image from "next/image";
 import React, { useState } from "react";
 
-const services = [
+// --- Types ---
+interface Service {
+  id: string;
+  title: string;
+  features: string[];
+  button: string;
+  imgSrc: string;
+  alt: string;
+  serviceValue: string;
+}
+
+interface FormData {
+  fullName: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  selectedService?: string;
+}
+
+const services: Service[] = [
   {
     id: "new-roof-installation",
     title: "New Roof Installations",
@@ -73,7 +92,7 @@ const services = [
 ];
 
 export default function ResidentialServices() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
 
   const handleServiceSelect = (serviceValue: string) => {
@@ -81,7 +100,7 @@ export default function ResidentialServices() {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: FormData) => {
     console.log("Form submission:", data);
     // Add your custom API call or processing logic here
   };
@@ -98,10 +117,10 @@ export default function ResidentialServices() {
         </p>
       </div>
 
-      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        {services.map((service, index) => (
+      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {services.map((service) => (
           <div
-            key={index}
+            key={service.id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
@@ -117,7 +136,7 @@ export default function ResidentialServices() {
                 {service.title}
               </h1>
               <ul>
-                {service?.features?.map((feature) => (
+                {service.features.map((feature) => (
                   <li
                     key={feature}
                     className="text-[#4F4F4F] mb-1 list-disc list-inside"
