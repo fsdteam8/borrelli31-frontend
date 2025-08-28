@@ -188,3 +188,23 @@ export async function updateReviewStatus(
     throw error.response?.data?.message || "Failed to update review status";
   }
 }
+// Create review api
+export async function createReview(data: any) {
+  try {
+    const response = await api.post("/reviews", data);
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error.message;
+  }
+}
+
+
+// Get all approved reviews
+export async function getApprovedReviews() {
+  try {
+    const response = await api.get("/reviews/approved");
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error.message;
+  }
+}
