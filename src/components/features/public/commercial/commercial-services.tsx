@@ -1,10 +1,21 @@
-"use client"
+"use client";
 
 import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const services = [
+// --- Types ---
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  button: string;
+  imgSrc: string;
+  alt: string;
+  serviceValue: string;
+}
+
+const services: Service[] = [
   {
     id: "new-roof-installation",
     title: "New Roof Installation",
@@ -66,8 +77,16 @@ const services = [
   },
 ];
 
+interface FormData {
+  fullName: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  selectedService?: string;
+}
+
 export default function CommercialServices() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
 
   const handleServiceSelect = (serviceValue: string) => {
@@ -75,7 +94,7 @@ export default function CommercialServices() {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: FormData) => {
     console.log("Form submission:", data);
     // Add your custom API call or processing logic here
   };
@@ -92,10 +111,10 @@ export default function CommercialServices() {
         </p>
       </div>
 
-      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        {services.map((service, index) => (
+      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {services.map((service) => (
           <div
-            key={index}
+            key={service.id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">

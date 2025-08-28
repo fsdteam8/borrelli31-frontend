@@ -18,19 +18,46 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { CustomPagination } from "../shared/Pagination/CustomPagination";
 
+// --- Type Definitions ---
+interface Service {
+  name: string;
+}
+
+interface AssessmentType {
+  id: string;
+  inquiryId: string;
+  fullName: string;
+  phone?: string;
+  email?: string;
+  propertyAddress?: string;
+  service?: Service;
+  status: "COMPLETED" | "PENDING" | string;
+}
+
+interface PaginationMeta {
+  totalPages: number;
+  totalData: number;
+}
+
+interface AssessmentPaginationResponse {
+  items: AssessmentType[];
+  meta: PaginationMeta;
+  completedCount?: number;
+  pendingCount?: number;
+}
+
 export default function Assessment() {
   const { data: session, status } = useSession();
-  const [selected, setSelected] = useState<any>(null);
+  const [selected, setSelected] = useState<AssessmentType | null>(null);
   const [open, setOpen] = useState(false);
 
   // --- Pagination state ---
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 6;
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<AssessmentPaginationResponse>({
     queryKey: ["assessments", currentPage, limit],
     queryFn: () => getAssessmentsPagination(currentPage, limit),
-    // keepPreviousData: true,
   });
 
   if (status === "loading") return <div>Loading session...</div>;
@@ -38,20 +65,18 @@ export default function Assessment() {
   if (isLoading) return <div>Loading assessments...</div>;
   if (isError) return <div>Failed to load assessments.</div>;
 
-  // --- Data extraction ---
-  const assessments = data?.data?.items ?? data?.items ?? [];
-  const totalItems = data?.data?.total ?? data?.total ?? assessments.length;
+  const assessments = data?.items ?? [];
+  const totalItems = data?.meta.totalData ?? assessments.length;
 
-  // --- Counts ---
   const completedCount =
-    data?.data?.completedCount ??
-    assessments.filter((a: any) => a.status === "COMPLETED").length;
+    data?.completedCount ??
+    assessments.filter((a) => a.status === "COMPLETED").length;
   const pendingCount =
-    data?.data?.pendingCount ??
-    assessments.filter((a: any) => a.status === "PENDING").length;
+    data?.pendingCount ??
+    assessments.filter((a) => a.status === "PENDING").length;
 
   // --- PDF download ---
-  const handleDownload = (row: any) => {
+  const handleDownload = (row: AssessmentType) => {
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text("Assessment Details", 105, 20, { align: "center" });
@@ -166,13 +191,13 @@ export default function Assessment() {
                     </td>
                   </tr>
                 ) : (
-                  assessments.map((a: any, idx: number) => (
-                    <tr key={a.id || idx} className="border border-[#0F3D68]">
+                  assessments.map((a) => (
+                    <tr key={a.id} className="border border-[#0F3D68]">
                       <td className="px-4 py-2 border border-[#0F3D68]">
-                        {a.inquiryId || "N/A"}
+                        {a.inquiryId}
                       </td>
                       <td className="px-4 py-2 border border-[#0F3D68]">
-                        {a.fullName || "N/A"}
+                        {a.fullName}
                       </td>
                       <td className="px-4 py-2 border border-[#0F3D68]">
                         {a.email || "N/A"}
@@ -185,7 +210,7 @@ export default function Assessment() {
                               : "bg-[#E2BF64]"
                           }`}
                         >
-                          {a.status || "UNKNOWN"}
+                          {a.status}
                         </span>
                       </td>
                       <td className="px-4 py-2 border border-[#0F3D68] text-center flex justify-center gap-3">
@@ -214,13 +239,15 @@ export default function Assessment() {
         </div>
 
         {/* --- Pagination --- */}
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={data.data.meta.totalPages}
-          perPage={limit}
-          totalItems={data.data.meta.totalData}
-          onPageChange={handlePageChange}
-        />
+        {data?.meta && (
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={data.meta.totalPages}
+            perPage={limit}
+            totalItems={data.meta.totalData}
+            onPageChange={handlePageChange}
+          />
+        )}
 
         {/* --- Modal --- */}
         <Dialog open={open} onOpenChange={setOpen}>

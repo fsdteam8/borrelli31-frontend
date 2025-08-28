@@ -31,6 +31,7 @@ export async function forgotPassword(email: string) {
       }
     );
     return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw error.response?.data || error.message;
   }
@@ -49,8 +50,8 @@ export async function verifyOtpCode(email: string, otp: string) {
       }
     );
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "OTP verification failed";
+  } catch {
+    throw "OTP verification failed";
   }
 }
 
@@ -67,8 +68,8 @@ export async function resetPassword(email: string, newPassword: string) {
       }
     );
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "OTP verification failed";
+  } catch {
+    throw "OTP verification failed";
   }
 }
 
@@ -81,8 +82,8 @@ export async function getAssessments() {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "Failed to fetch assessments";
+  } catch {
+    throw "Failed to fetch assessments";
   }
 }
 
@@ -98,8 +99,8 @@ export async function getAssessmentsPagination(
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "Failed to fetch assessments";
+  } catch {
+    throw "Failed to fetch assessments";
   }
 }
 
@@ -112,8 +113,8 @@ export async function getMessages({ page = 1, limit = 10 }) {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "Failed to fetch messages";
+  } catch {
+    throw "Failed to fetch messages";
   }
 }
 
@@ -158,8 +159,8 @@ export async function getReviewsStats(page: number = 1, limit: number = 10) {
       },
     });
     return res.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "Failed to fetch reviews";
+  } catch {
+    throw "Failed to fetch reviews";
   }
 }
 
@@ -168,10 +169,7 @@ export async function getReviewsStats(page: number = 1, limit: number = 10) {
 //   "status": "Approved"
 // }
 // ✅ Update review status (Approved)
-export async function updateReviewStatus(
-  reviewId: string,
-  status: "Approved"
-) {
+export async function updateReviewStatus(reviewId: string, status: "Approved") {
   try {
     const res = await api.patch(
       `/reviews/${reviewId}/status`,
@@ -182,29 +180,29 @@ export async function updateReviewStatus(
         },
       }
     );
-    console.log(res.data)
+    console.log(res.data);
     return res.data;
-  } catch (error: any) {
-    throw error.response?.data?.message || "Failed to update review status";
+  } catch {
+    throw "Failed to update review status";
   }
 }
 // Create review api
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createReview(data: any) {
   try {
     const response = await api.post("/reviews", data);
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data || error.message;
+  } catch {
+    throw "Failed reviews";
   }
 }
-
 
 // Get all approved reviews
 export async function getApprovedReviews() {
   try {
     const response = await api.get("/reviews/approved");
     return response.data;
-  } catch (error: any) {
-    throw error.response?.data || error.message;
+  } catch {
+    throw "Failed reviews approved";
   }
 }

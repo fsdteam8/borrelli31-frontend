@@ -37,7 +37,7 @@ export default function ForgotPassword() {
   // Tanstack mutation
   const mutation = useMutation({
     mutationFn: (email: string) => forgotPassword(email),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("🎉 Congratulations! A 6-digit reset code has been sent to your email.");
       setTimeout(() => {
         router.push("/enter-otp");

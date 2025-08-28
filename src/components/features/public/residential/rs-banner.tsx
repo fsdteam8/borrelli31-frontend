@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Award, Clock, MoveRight, Shield, StickyNote } from "lucide-react";
+import {   Clock, MoveRight, Shield, StickyNote } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -15,7 +15,7 @@ export default function RsBanner() {
               with Quality <span className="text-[#D62D27]">Roofing</span>
             </h2>
             <p className="lg:text-xl text-base">
-              Houston's trusted roofing experts providing peace of mind through
+              Houston&apos;s trusted roofing experts providing peace of mind through
               quality craftsmanship, transparent communication, and exceptional
               service.
             </p>
@@ -54,7 +54,7 @@ export default function RsBanner() {
               </h3>
               <p className="text-base text-[#E7E7E7]">
                 Advanced drone technology provides comprehensive visual
-                documentation of your roof's condition.
+                documentation of your roof&apos;s condition.
               </p>
             </div>
           </div>
