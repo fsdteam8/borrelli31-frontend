@@ -120,7 +120,7 @@ export default function ServiceCard() {
             </div>
           </div>
         ))}
-      </div>
+      </div> 
 
       {/* Modal for inquiry form */}
       <RoofingInquiryModal
