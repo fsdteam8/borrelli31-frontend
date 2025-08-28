@@ -11,7 +11,7 @@ api.interceptors.request.use(
   async (config) => {
     const session = await getSession();
     if (session?.accessToken) {
-      config.headers.Authorization = `${session.accessToken}`;
+      config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
     return config;
   },
@@ -23,7 +23,7 @@ export async function forgotPassword(email: string) {
   try {
     const response = await api.post(
       "/auth/forget-password",
-      { email }, 
+      { email },
       {
         headers: {
           "Content-Type": "application/json",
@@ -69,5 +69,122 @@ export async function resetPassword(email: string, newPassword: string) {
     return response.data;
   } catch (error: any) {
     throw error.response?.data?.message || "OTP verification failed";
+  }
+}
+
+// get assessments
+export async function getAssessments() {
+  try {
+    const response = await api.get("/assessments", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || "Failed to fetch assessments";
+  }
+}
+
+// Get assessments with pagination
+export async function getAssessmentsPagination(
+  page: number = 1,
+  limit: number = 10
+) {
+  try {
+    const response = await api.get(`/assessments?page=${page}&limit=${limit}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || "Failed to fetch assessments";
+  }
+}
+
+// get messages pagination
+export async function getMessages({ page = 1, limit = 10 }) {
+  try {
+    const response = await api.get(`/messages?page=${page}&limit=${limit}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || "Failed to fetch messages";
+  }
+}
+
+// Password change
+export async function changePassword(data: {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}) {
+  try {
+    const res = await api.post(`/auth/change-password`, data);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// // Get user profile
+// export async function getUserProfile() {
+//   const res = await api.get(`/user/profile`);
+//   return res.data;
+// }
+
+// // Update user profile
+// export async function updateUserProfile(
+//   profileData: Partial<UserProfile>
+// ): Promise<NextApiResponse<UserProfile>> {
+//   try {
+//     const res = await api.put(`/user/update-profile`, profileData);
+//     return res.data;
+//   } catch {
+//     throw new Error("Failed to update profile");
+//   }
+// }
+
+// ✅ Reviews fetch with pagination
+export async function getReviewsStats(page: number = 1, limit: number = 10) {
+  try {
+    const res = await api.get(`/reviews?page=${page}&limit=${limit}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || "Failed to fetch reviews";
+  }
+}
+
+// /reviews/{{reviewId}}/status Approved or Pending
+// {
+//   "status": "Approved"
+// }
+// ✅ Update review status (Approved)
+export async function updateReviewStatus(
+  reviewId: string,
+  status: "Approved"
+) {
+  try {
+    const res = await api.patch(
+      `/reviews/${reviewId}/status`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(res.data)
+    return res.data;
+  } catch (error: any) {
+    throw error.response?.data?.message || "Failed to update review status";
   }
 }
