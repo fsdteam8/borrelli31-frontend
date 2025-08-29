@@ -39,12 +39,9 @@ export default function Setting() {
       <div className="space-y-3">
         {settings.map((item, index) => (
           <Link key={index} href={item.href}>
-            <Card className="rounded-xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border border-border my-2">
-              <CardContent className="flex items-center justify-between p-4 gap-4">
-                <div className="flex items-center gap-3">
-                  {item.icon}
-                  <span className="font-medium text-lg">{item.title}</span>
-                </div>
+            <Card className="bg-transparent shadow-none rounded-md  cursor-pointer border border-[#B6B6B6] my-2">
+              <CardContent className="flex items-center justify-between gap-4">
+                <span className="font-medium text-lg">{item.title}</span>
                 <ChevronRight className="h-5 w-5 text-muted-foreground" />
               </CardContent>
             </Card>

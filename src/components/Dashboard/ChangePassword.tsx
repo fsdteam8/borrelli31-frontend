@@ -69,11 +69,13 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    <div className="bg-[#EDEEF1] flex items-center">
+    <div className="bg-[#EDEEF1] border-y border-[#B6B6B6] flex items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-8 mx-auto container rounded-lg p-8 py-20"
+        className="space-y-8 mx-auto container rounded-lg py-20"
       >
+        <h1 className="text-[#131313] text-[18px] font-semibold">Change Password</h1>
+
         {/* 3 input fields side by side */}
         <div className="flex flex-col md:flex-row gap-6">
           {[
@@ -113,7 +115,7 @@ export default function ChangePasswordForm() {
                   id={id}
                   type={visible ? "text" : "password"}
                   {...register(field as keyof PasswordFormData)}
-                  className="pr-10 bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="pr-10 h-12 rounded-sm border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <button
                   type="button"

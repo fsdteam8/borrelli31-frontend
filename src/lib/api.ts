@@ -31,9 +31,8 @@ export async function forgotPassword(email: string) {
       }
     );
     return response.data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    throw error.response?.data || error.message;
+  } catch {
+    throw "forget-password failed";
   }
 }
 
@@ -133,22 +132,44 @@ export async function changePassword(data: {
 }
 
 // // Get user profile
-// export async function getUserProfile() {
-//   const res = await api.get(`/user/profile`);
-//   return res.data;
-// }
+export async function getUserProfile() {
+  const res = await api.get(`/user/my-profile`);
+  return res.data;
+}
 
-// // Update user profile
-// export async function updateUserProfile(
-//   profileData: Partial<UserProfile>
-// ): Promise<NextApiResponse<UserProfile>> {
-//   try {
-//     const res = await api.put(`/user/update-profile`, profileData);
-//     return res.data;
-//   } catch {
-//     throw new Error("Failed to update profile");
-//   }
-// }
+// TypeScript type for the API response
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface ApiResponse<T = any> {
+  status: boolean;
+  message: string;
+  data: T;
+}
+
+// Payload type (strongly typed version, optional fields)
+interface UserProfileUpdatePayload {
+  name?: string;
+  username?: string;
+  phone?: string;
+  gender?: string;
+  dob?: string;
+  address?: string;
+}
+
+// Update user profile function
+export async function userProfileUpdate(
+  userId: string,
+  payload: UserProfileUpdatePayload
+): Promise<ApiResponse<UserProfileUpdatePayload>> {
+  try {
+    const res = await api.put<ApiResponse<UserProfileUpdatePayload>>(
+      `/user/${userId}`,
+      payload
+    );
+    return res.data;
+  } catch {
+    throw new Error("Failed to update profile");
+  }
+}
 
 // ✅ Reviews fetch with pagination
 export async function getReviewsStats(page: number = 1, limit: number = 10) {
@@ -164,10 +185,6 @@ export async function getReviewsStats(page: number = 1, limit: number = 10) {
   }
 }
 
-// /reviews/{{reviewId}}/status Approved or Pending
-// {
-//   "status": "Approved"
-// }
 // ✅ Update review status (Approved)
 export async function updateReviewStatus(reviewId: string, status: "Approved") {
   try {
@@ -184,6 +201,16 @@ export async function updateReviewStatus(reviewId: string, status: "Approved") {
     return res.data;
   } catch {
     throw "Failed to update review status";
+  }
+}
+
+// Delete reviews
+export async function deleteReview(reviewId: string) {
+  try {
+    const response = await api.delete(`/reviews/${reviewId}`);
+    return response.data;
+  } catch  {
+    throw new Error("Failed to delete review");
   }
 }
 // Create review api
@@ -204,5 +231,43 @@ export async function getApprovedReviews() {
     return response.data;
   } catch {
     throw "Failed reviews approved";
+  }
+}
+
+// get Assessments stats
+export async function getAssessmentsstats() {
+  try {
+    const response = await api.get("/assessments/stats");
+    return response.data;
+  } catch {
+    throw "Failed reviews approved";
+  }
+}
+// get Assessments stats
+export async function getAssessmentsStatsAdmin(period: string = "30d") {
+  try {
+    const response = await api.get(
+      `/assessments/stats/timeline?period=${period}`
+    );
+    return response.data;
+  } catch {
+    throw new Error("Failed to fetch assessment stats");
+  }
+}
+// types.ts
+export interface MessagePayload {
+  fullName: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+// CREATE Massage
+export async function createMessages(payload: MessagePayload) {
+  try {
+    const response = await api.post("/messages", payload);
+    return response.data;
+  } catch {
+    throw new Error("Failed to create message");
   }
 }

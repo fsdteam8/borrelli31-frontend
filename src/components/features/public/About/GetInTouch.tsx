@@ -15,6 +15,8 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { createMessages, MessagePayload } from "@/lib/api";
+import { toast } from "sonner";
 
 // ✅ Validation schema
 const FormSchema = z.object({
@@ -38,10 +40,23 @@ export default function GetInTouch() {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    console.log("Form Data:", values);
-  };
+  const onSubmit = async (values: FormValues) => {
+    try {
+      // Call the API
+      const response = await createMessages(values as MessagePayload);
+      console.log("Message created:", response);
 
+      // Optional: reset form after submission
+      form.reset();
+
+      // Optional: show success message
+      // alert("Message sent successfully!");
+      toast.success("Message sent successfully!");
+    } catch {
+      toast.error("Failed to send message");
+      // alert("Failed to send message");
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -148,8 +163,8 @@ export default function GetInTouch() {
               Why Choose Borrelli Roofing?
             </h2>
             <p className="text-[#000] text-sm">
-              When you work with us, you&apos;re working directly with the owner.
-              Constantino personally oversees every project to ensure the
+              When you work with us, you&apos;re working directly with the
+              owner. Constantino personally oversees every project to ensure the
               highest quality standards are met. <br /> <br />
               We&apos;re committed to providing exceptional service, transparent
               communication, and lasting results for every client.
@@ -172,7 +187,11 @@ export default function GetInTouch() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" className="h-12" {...field} />
+                      <Input
+                        placeholder="John Doe"
+                        className="h-12"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -240,7 +259,7 @@ export default function GetInTouch() {
                 )}
               />
 
-              <Button type="submit" className="w-full bg-[#0F3D68] text-white">
+              <Button type="submit" className="w-full bg-[#0F3D68] text-white cursor-pointer">
                 Send Message
               </Button>
             </form>
