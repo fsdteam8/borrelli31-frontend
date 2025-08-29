@@ -119,9 +119,9 @@ export async function getMessages({ page = 1, limit = 10 }) {
 
 // Password change
 export async function changePassword(data: {
-  currentPassword: string;
+  // userId: string;
+  oldPassword: string;
   newPassword: string;
-  confirmPassword: string;
 }) {
   try {
     const res = await api.post(`/auth/change-password`, data);
@@ -209,7 +209,7 @@ export async function deleteReview(reviewId: string) {
   try {
     const response = await api.delete(`/reviews/${reviewId}`);
     return response.data;
-  } catch  {
+  } catch {
     throw new Error("Failed to delete review");
   }
 }

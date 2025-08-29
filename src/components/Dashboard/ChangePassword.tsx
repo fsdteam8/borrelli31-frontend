@@ -6,21 +6,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Save, X } from "lucide-react"; // ✅ Save + Cancel icons
+import { Eye, EyeOff, Save, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
+import axios from "axios";
 import { changePassword } from "@/lib/api";
-import { useRouter } from "next/navigation"; // ✅ Router import
+import { toast } from "sonner";
 
-// ✅ Zod Schema aligned with frontend labels
+// ✅ Zod Schema
 const passwordSchema = z
   .object({
     oldPassword: z.string().min(1, "Old password is required"),
     newPassword: z
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Must contain at least one lowercase letter")
-      .regex(/[0-9]/, "Must contain at least one number")
-      .regex(/[@$!%*?&]/, "Must contain at least one special character"),
+      .min(6, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -33,6 +32,23 @@ const passwordSchema = z
   });
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
+
+// ✅ API call with userId
+async function changePasswordWithUserId(data: {
+  // userId: string;
+  oldPassword: string;
+  newPassword: string;
+}) {
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`,
+      data
+    );
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Password change failed");
+  }
+}
 
 export default function ChangePasswordForm() {
   const router = useRouter();
@@ -57,14 +73,23 @@ export default function ChangePasswordForm() {
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
-      const res = await changePassword({
-        currentPassword: data.oldPassword,
+      const session = await getSession();
+      if (!session?.user?.id) throw new Error("User not logged in");
+
+      const payload = {
+        // userId: session.user.id,
+        oldPassword: data.oldPassword,
         newPassword: data.newPassword,
-        confirmPassword: data.confirmPassword,
-      });
+      };
+
+      const res = await changePassword(payload);
       console.log("Password changed:", res);
-    } catch (error) {
-      console.error("Password change failed:", error);
+      // alert("Password changed successfully!");
+      toast.success("Password changed successfully!")
+      router.push("/dashboard/setting");
+    } catch (error: any) {
+      console.error("Password change failed:", error.message);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -76,7 +101,6 @@ export default function ChangePasswordForm() {
       >
         <h1 className="text-[#131313] text-[18px] font-semibold">Change Password</h1>
 
-        {/* 3 input fields side by side */}
         <div className="flex flex-col md:flex-row gap-6">
           {[
             {
@@ -137,7 +161,6 @@ export default function ChangePasswordForm() {
           ))}
         </div>
 
-        {/* Save + Cancel buttons */}
         <div className="flex justify-end gap-3">
           <Button
             type="button"
