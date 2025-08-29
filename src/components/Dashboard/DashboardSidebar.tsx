@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   Settings,
   LogOut,
-  Menu,
   LayoutDashboard,
   MessageCircle,
   Star,
@@ -33,7 +32,7 @@ const menu = [
 ];
 
 export default function DashboardSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed] = useState(false);
   const [active, setActive] = useState("/dashboard");
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const router = useRouter();
@@ -49,7 +48,6 @@ export default function DashboardSidebar() {
     await signOut({ redirect: false });
     toast.success("You have successfully logged out.");
 
-    // Redirect after 2 seconds
     setTimeout(() => {
       router.push("/");
     }, 2000);
@@ -62,35 +60,22 @@ export default function DashboardSidebar() {
           ${collapsed ? "w-16" : "w-60"} shrink-0 h-screen`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-4 py-4 border-b">
-          <div
-            className={`flex items-center gap-2 cursor-pointer ${
-              collapsed ? "justify-center w-full" : ""
-            }`}
-            onClick={() => handleNavigation("/dashboard")}
-          >
-            <div className="relative w-10 h-10">
-              <Image
-                src="/Borrelli_Logo.svg"
-                alt="Borrelli Logo"
-                fill
-                className="object-contain"
-              />
-            </div>
-            {!collapsed && <span className="text-xl font-bold">Borrelli</span>}
+        <div
+          className="flex justify-center items-center px-4 py-6 border-b cursor-pointer"
+          onClick={() => handleNavigation("/dashboard")}
+        >
+          <div className="relative w-12 h-12">
+            <Image
+              src="/Borrelli_Logo.svg"
+              alt="Borrelli Logo"
+              fill
+              className="object-contain"
+            />
           </div>
-
-          <button
-            onClick={() => setCollapsed((c) => !c)}
-            className="p-1 rounded-md hover:bg-gray-100"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <Menu className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 overflow-auto px-1 py-3">
+        <nav className="flex-1 px-2 py-3 ">
           <ul className="space-y-1">
             {menu.map((m) => {
               const isActive = active === m.id;
@@ -102,7 +87,7 @@ export default function DashboardSidebar() {
                     className={`group relative flex items-center gap-3 w-full text-left px-3 py-2 rounded-md mx-2 transition-colors duration-150 cursor-pointer
                       ${
                         isActive
-                          ? "bg-[#0F3D68] text-[18px]  text-[#FFF]"
+                          ? "bg-[#0F3D68] text-[18px] text-white"
                           : "text-[#131313] text-[18px] font-bold hover:bg-gray-100"
                       }`}
                   >
@@ -129,7 +114,7 @@ export default function DashboardSidebar() {
         {/* Logout */}
         <div className="px-3 py-4 border-t">
           <button
-            onClick={() => setOpenLogoutDialog(true)} // <-- Open confirmation dialog
+            onClick={() => setOpenLogoutDialog(true)}
             className="group relative flex items-center gap-3 w-full text-left px-3 py-2 rounded-md bg-red-100 text-red-700 cursor-pointer hover:bg-red-200 transition-colors"
           >
             <span className="flex items-center justify-center shrink-0 w-7 h-7 rounded-md text-red-700 group-hover:text-red-800">
@@ -160,16 +145,11 @@ export default function DashboardSidebar() {
           <DialogFooter className="flex justify-end gap-2">
             <Button
               variant="outline"
-              className="cursor-pointer"
               onClick={() => setOpenLogoutDialog(false)}
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              className="cursor-pointer"
-              onClick={handleLogout}
-            >
+            <Button variant="destructive" onClick={handleLogout}>
               Logout
             </Button>
           </DialogFooter>

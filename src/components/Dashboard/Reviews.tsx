@@ -3,10 +3,11 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getReviewsStats, updateReviewStatus } from "@/lib/api";
+import { deleteReview, getReviewsStats, updateReviewStatus } from "@/lib/api";
 import { Card, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Star, Search } from "lucide-react";
+import { toast } from "sonner";
 
 // --- Types ---
 interface ReviewItem {
@@ -52,7 +53,9 @@ export default function Reviews() {
   if (isError || !data) {
     return (
       <div className="mx-auto container">
-        <p className="text-center py-10 text-red-500">Failed to load reviews.</p>
+        <p className="text-center py-10 text-red-500">
+          Failed to load reviews.
+        </p>
       </div>
     );
   }
@@ -63,16 +66,63 @@ export default function Reviews() {
     try {
       await updateReviewStatus(reviewId, "Approved");
 
+      // Show toast separately
+      toast.success("Review approved successfully");
+
       // Optimistic UI update
-      queryClient.setQueryData(["reviewsStats", 1, 10], (oldData: ReviewsResponse | undefined) => {
-        if (!oldData) return oldData;
-        const newItems = oldData.data.items.map((r) =>
-          r._id === reviewId ? { ...r, status: "Approved" } : r
-        );
-        return { ...oldData, data: { ...oldData.data, items: newItems } };
-      });
+      queryClient.setQueryData(
+        ["reviewsStats", 1, 10],
+        (oldData: ReviewsResponse | undefined) => {
+          if (!oldData) return oldData;
+          const newItems = oldData.data.items.map((r) =>
+            r._id === reviewId ? { ...r, status: "Approved" } : r
+          );
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              items: newItems,
+            },
+          };
+        }
+      );
     } catch (err) {
       console.error("Failed to approve review:", err);
+      toast.error("Failed to approve review");
+    }
+  };
+
+  const handleDecline = async (reviewId: string) => {
+    try {
+      await deleteReview(reviewId);
+
+      // Show toast
+      toast.warning("Review deleted successfully");
+
+      // Optimistic UI update
+      queryClient.setQueryData(
+        ["reviewsStats", 1, 10],
+        (oldData: ReviewsResponse | undefined) => {
+          if (!oldData) return oldData;
+
+          const newItems = oldData.data.items.filter((r) => r._id !== reviewId);
+
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              items: newItems,
+              meta: {
+                ...oldData.data.meta,
+                totalData: oldData.data.meta.totalData - 1,  
+              },
+            },
+          };
+        }
+      );
+    } catch (err) {
+      console.error("Failed to delete review:", err);
+      toast.error("Failed to delete review");
     }
   };
 
@@ -93,10 +143,15 @@ export default function Reviews() {
     <div className="mx-auto container py-10 space-y-10">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border border-[#0F3D68] shadow-xl rounded-xl">
+        <Card className="bg-transparent border border-[#0F3D68] shadow-xl rounded-xl">
           <CardContent className="flex items-center p-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
-              <Image src="/images/Group1.svg" alt="Total" width={24} height={24} />
+              <Image
+                src="/images/Group1.svg"
+                alt="Total"
+                width={24}
+                height={24}
+              />
             </div>
             <div className="ml-4">
               <p className="text-base text-gray-500">Total Reviews</p>
@@ -105,26 +160,40 @@ export default function Reviews() {
           </CardContent>
         </Card>
 
-        <Card className="border border-[#0F3D68] shadow-xl rounded-xl">
+        <Card className=" bg-transparent border border-[#0F3D68] shadow-xl rounded-xl">
           <CardContent className="flex items-center p-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
-              <Image src="/images/Group2.svg" alt="Approved" width={24} height={24} />
+              <Image
+                src="/images/Group2.svg"
+                alt="Approved"
+                width={24}
+                height={24}
+              />
             </div>
             <div className="ml-4">
               <p className="text-base text-gray-500">Approved Reviews</p>
-              <p className="text-2xl font-bold text-gray-900">{approvedReviews}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {approvedReviews}
+              </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border border-[#0F3D68] shadow-xl rounded-xl">
+        <Card className="bg-transparent border border-[#0F3D68] shadow-xl rounded-xl">
           <CardContent className="flex items-center p-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
-              <Image src="/images/Group3.svg" alt="Pending" width={24} height={24} />
+              <Image
+                src="/images/Group3.svg"
+                alt="Pending"
+                width={24}
+                height={24}
+              />
             </div>
             <div className="ml-4">
               <p className="text-base text-gray-500">Pending Reviews</p>
-              <p className="text-2xl font-bold text-gray-900">{pendingReviews}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {pendingReviews}
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -155,7 +224,9 @@ export default function Reviews() {
               <div className="grid col-span-3">
                 <div className="flex items-center space-x-4">
                   <Avatar className="h-20 w-20">
-                    <AvatarFallback>{review.fullName?.[0] || "U"}</AvatarFallback>
+                    <AvatarFallback>
+                      {review.fullName?.[0] || "U"}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="font-medium">{review.fullName}</p>
@@ -176,7 +247,9 @@ export default function Reviews() {
               </div>
 
               <div className="grid col-span-9">
-                <div className="flex-1 text-gray-700 py-6">{review.description}</div>
+                <div className="flex-1 text-gray-700 py-6">
+                  {review.description}
+                </div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => handleApprove(review._id)}
@@ -184,7 +257,10 @@ export default function Reviews() {
                   >
                     Approve
                   </button>
-                  <button className="px-2 py-1 w-full rounded-md border border-[#0F3D68] text-[#0F3D68] cursor-pointer">
+                  <button
+                    onClick={() => handleDecline(review._id)}
+                    className="px-2 py-1 w-full rounded-md border border-[#0F3D68] text-[#0F3D68] cursor-pointer"
+                  >
                     Decline
                   </button>
                 </div>

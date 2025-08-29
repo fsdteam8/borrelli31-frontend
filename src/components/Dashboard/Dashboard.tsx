@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowDownToLine } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import AssessmentDetails from "./AssessmentDetails";
 
 // --- Types ---
 interface Service {
@@ -43,16 +44,27 @@ export default function Dashboard() {
   const { data: session, status } = useSession();
   const [selected, setSelected] = useState<Assessment | null>(null);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { data, isLoading, isError } = useQuery<AssessmentsResponse>({
     queryKey: ["assessments"],
     queryFn: getAssessments,
   });
 
-  if (status === "loading") return <div>Loading session...</div>;
-  if (!session) return <div>You are not logged in.</div>;
-  if (isLoading) return <div>Loading assessments...</div>;
-  if (isError) return <div>Failed to load assessments.</div>;
+  if (!mounted) {
+    // prevent SSR/CSR mismatch
+    return null;
+  }
+
+  if (status === "loading")
+    return <div suppressHydrationWarning>Loading session...</div>;
+  if (!session) return <div suppressHydrationWarning>You are not logged in.</div>;
+  if (isLoading) return <div suppressHydrationWarning>Loading assessments...</div>;
+  if (isError) return <div suppressHydrationWarning>Failed to load assessments.</div>;
 
   const assessments = (data?.data.items ?? []).slice(-6).reverse();
 
@@ -82,8 +94,10 @@ export default function Dashboard() {
   };
 
   const totalItems = data?.data.items.length ?? 0;
-  const completedCount = data?.data.items.filter((a) => a.status === "COMPLETED").length ?? 0;
-  const pendingCount = data?.data.items.filter((a) => a.status === "PENDING").length ?? 0;
+  const completedCount =
+    data?.data.items.filter((a) => a.status === "COMPLETED").length ?? 0;
+  const pendingCount =
+    data?.data.items.filter((a) => a.status === "PENDING").length ?? 0;
 
   return (
     <div className="bg-[#F4F4F4] min-h-screen py-10">
@@ -92,27 +106,44 @@ export default function Dashboard() {
         <div className="pb-20 pt-10">
           <div className="border border-[#0F3D68] rounded-2xl p-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {[{
-                title: "Total Assessment",
-                count: totalItems,
-                icon: "/images/Group1.svg",
-              }, {
-                title: "Completed Assessment",
-                count: completedCount,
-                icon: "/images/Group2.svg",
-              }, {
-                title: "Pending Assessment",
-                count: pendingCount,
-                icon: "/images/Group3.svg",
-              }].map((card, idx) => (
-                <Card key={idx} className="border bg-0 border-[#0F3D68] shadow-xl rounded-xl">
+              {[
+                {
+                  title: "Total Assessment",
+                  count: totalItems,
+                  icon: "/images/Group1.svg",
+                },
+                {
+                  title: "Completed Assessment",
+                  count: completedCount,
+                  icon: "/images/Group2.svg",
+                },
+                {
+                  title: "Pending Assessment",
+                  count: pendingCount,
+                  icon: "/images/Group3.svg",
+                },
+              ].map((card, idx) => (
+                <Card
+                  key={idx}
+                  className="border bg-0 border-[#0F3D68] shadow-xl rounded-xl"
+                >
                   <CardContent className="flex items-center p-6">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
-                      <Image src={card.icon} alt={`icon-${idx}`} height={24} width={24} />
+                      <Image
+                        src={card.icon}
+                        alt={`icon-${idx}`}
+                        height={24}
+                        width={24}
+                        priority
+                      />
                     </div>
                     <div className="ml-4">
-                      <p className="text-base font-medium text-[#787878]">{card.title}</p>
-                      <p className="text-2xl font-bold text-[#2A2A2A]">{card.count}</p>
+                      <p className="text-base font-medium text-[#787878]">
+                        {card.title}
+                      </p>
+                      <p className="text-2xl font-bold text-[#2A2A2A]">
+                        {card.count}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -131,26 +162,52 @@ export default function Dashboard() {
             <table className="min-w-full border border-[#0F3D68] rounded-xl">
               <thead className="bg-gray-100">
                 <tr>
-                  {["Assessment ID", "User Name", "Email Address", "Assessment Status", "Assessment Info"].map((header, idx) => (
-                    <th key={idx} className="px-4 py-2 border border-[#0F3D68]">{header}</th>
+                  {[
+                    "Assessment ID",
+                    "User Name",
+                    "Email Address",
+                    "Assessment Status",
+                    "Assessment Info",
+                  ].map((header, idx) => (
+                    <th
+                      key={idx}
+                      className="px-4 py-2 border border-[#0F3D68]"
+                    >
+                      {header}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {assessments.map((a) => (
                   <tr key={a.id} className="border border-[#0F3D68]">
-                    <td className="px-4 py-2 border border-[#0F3D68]">{a.inquiryId}</td>
-                    <td className="px-4 py-2 border border-[#0F3D68]">{a.fullName}</td>
-                    <td className="px-4 py-2 border border-[#0F3D68]">{a.email ?? "N/A"}</td>
+                    <td className="px-4 py-2 border border-[#0F3D68]">
+                      {a.inquiryId}
+                    </td>
+                    <td className="px-4 py-2 border border-[#0F3D68]">
+                      {a.fullName}
+                    </td>
+                    <td className="px-4 py-2 border border-[#0F3D68]">
+                      {a.email ?? "N/A"}
+                    </td>
                     <td className="px-4 py-2 border border-[#0F3D68] text-center">
-                      <span className={`px-2 py-1 rounded text-white text-sm ${a.status === "COMPLETED" ? "bg-[#016102]" : "bg-[#E2BF64]"}`}>
+                      <span
+                        className={`px-2 py-1 rounded text-white text-sm ${
+                          a.status === "COMPLETED"
+                            ? "bg-[#016102]"
+                            : "bg-[#E2BF64]"
+                        }`}
+                      >
                         {a.status}
                       </span>
                     </td>
                     <td className="px-4 py-2 border border-[#0F3D68] text-center">
                       <div className="flex justify-center gap-3">
                         <button
-                          onClick={() => { setSelected(a); setOpen(true); }}
+                          onClick={() => {
+                            setSelected(a);
+                            setOpen(true);
+                          }}
                           className="text-[#424242] hover:text-[#016102] font-semibold underline cursor-pointer"
                         >
                           View Details
@@ -170,39 +227,54 @@ export default function Dashboard() {
           </div>
         </div>
 
+        <div>
+          <AssessmentDetails />
+        </div>
+
         {/* --- Modal --- */}
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="max-w-lg p-8 rounded-xl">
-            <DialogHeader>
-              <DialogTitle className="text-center text-xl font-bold">Assessment Details</DialogTitle>
-            </DialogHeader>
-            {selected && (
-              <div className="overflow-x-auto">
-                <table className="min-w-full border border-[#0F3D68] rounded-lg">
-                  <tbody>
-                    {[
-                      ["Assessment ID", selected.inquiryId],
-                      ["Full Name", selected.fullName],
-                      ["Phone", selected.phone ?? "N/A"],
-                      ["Email", selected.email ?? "N/A"],
-                      ["Property Address", selected.propertyAddress ?? "N/A"],
-                      ["Service Needed", selected.service?.name ?? "N/A"],
-                    ].map(([key, value], idx) => (
-                      <tr key={idx}>
-                        <td className="px-4 py-2 border border-[#0F3D68] font-semibold">{key}</td>
-                        <td className="px-4 py-2 border border-[#0F3D68]">{value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="mt-6 flex justify-center">
-                  <Button className="w-full bg-[#0F3D68] cursor-pointer text-white" onClick={() => handleDownload(selected)}>
-                    Download
-                  </Button>
+          {mounted && (
+            <DialogContent className="max-w-lg p-8 rounded-xl">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl font-bold">
+                  Assessment Details
+                </DialogTitle>
+              </DialogHeader>
+              {selected && (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border border-[#0F3D68] rounded-lg">
+                    <tbody>
+                      {[
+                        ["Assessment ID", selected.inquiryId],
+                        ["Full Name", selected.fullName],
+                        ["Phone", selected.phone ?? "N/A"],
+                        ["Email", selected.email ?? "N/A"],
+                        ["Property Address", selected.propertyAddress ?? "N/A"],
+                        ["Service Needed", selected.service?.name ?? "N/A"],
+                      ].map(([key, value], idx) => (
+                        <tr key={idx}>
+                          <td className="px-4 py-2 border border-[#0F3D68] font-semibold">
+                            {key}
+                          </td>
+                          <td className="px-4 py-2 border border-[#0F3D68]">
+                            {value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="mt-6 flex justify-center">
+                    <Button
+                      className="w-full bg-[#0F3D68] cursor-pointer text-white"
+                      onClick={() => handleDownload(selected)}
+                    >
+                      Download
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </DialogContent>
+              )}
+            </DialogContent>
+          )}
         </Dialog>
       </div>
     </div>
