@@ -82,10 +82,9 @@ export function CustomPagination({
   return (
     <div className="w-full flex justify-between">
       {/* Left side - showing items */}
-      <div className="text-sm text-gray-600 hidden md:block">
+      <div className="text-sm text-gray-600 hidden md:block w-full">
         {safeTotalItems > 0
-          ? `Showing ${startItem} to ${endItem} of ${safeTotalItems} results`
-          : "No results found"}
+          ? `Showing ${startItem} to ${endItem} of ${safeTotalItems} results`: "No results found"}
       </div>
 
       {/* Right side - pagination */}

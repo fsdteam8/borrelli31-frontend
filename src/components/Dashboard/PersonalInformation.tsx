@@ -19,6 +19,7 @@ interface UserProfile {
   gender?: string;
   dob?: string;
   address?: string;
+  profileImage?: string; // Added profileImage field
 }
 
 interface FormData {
@@ -52,8 +53,12 @@ export default function PersonalInformation() {
   });
   const [originalData, setOriginalData] = useState<FormData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string | null>(null); // Added state for image name
 
-  // যখনই API data আসবে, formData তে বসাও
+  // -----------------------
+  // When API data arrives, populate formData
+  // -----------------------
   useEffect(() => {
     if (userResponse?.data) {
       const apiData: FormData = {
@@ -66,6 +71,7 @@ export default function PersonalInformation() {
       };
       setFormData(apiData);
       setOriginalData(apiData);
+      setImageName(userResponse?.data?.profileImage || null); // Set existing image name if any
     }
   }, [userResponse]);
 
@@ -73,12 +79,12 @@ export default function PersonalInformation() {
   // Mutation (Update Profile)
   // -----------------------
   const mutation = useMutation({
-    mutationFn: ({ userId, payload }: { userId: string; payload: Partial<FormData> }) =>
+    mutationFn: ({ userId, payload }: { userId: string; payload: Partial<FormData> & { profileImage?: string } }) =>
       userProfileUpdate(userId, payload),
     onSuccess: (data) => {
       console.log("Profile Updated ✅", data);
       setIsEditing(false);
-      setOriginalData(formData); // update successful হলে new data কে original বানাও
+      setOriginalData(formData); // update successful
     },
     onError: (error) => {
       console.error("Update failed ❌", error.message);
@@ -88,9 +94,7 @@ export default function PersonalInformation() {
   // -----------------------
   // Handlers
   // -----------------------
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -98,20 +102,36 @@ export default function PersonalInformation() {
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    console.log(file)
+    if (file) {
+      setImageFile(file);
+      setImageName(file.name); // Store only the file name
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!originalData || !userResponse?.data?._id) return;
 
-    // শুধু যেসব ফিল্ড পরিবর্তন হয়েছে
-    const updatedFields: Partial<FormData> = {};
+    console.log(formData)
+    // Collect updated fields
+    const updatedFields: Partial<FormData> & { profileImage?: string } = {};
     (Object.keys(formData) as (keyof FormData)[]).forEach((key) => {
       if (formData[key] !== originalData[key]) {
         updatedFields[key] = formData[key];
       }
     });
 
+    if (imageName) {
+      updatedFields.profileImage = imageName; 
+    }
+
+    console.log(imageName)
+
     if (Object.keys(updatedFields).length === 0) {
-      console.log("কোনো পরিবর্তন হয়নি 🚫");
+      console.log("No changes made 🚫");
       setIsEditing(false);
       return;
     }
@@ -121,7 +141,7 @@ export default function PersonalInformation() {
     // API call
     mutation.mutate({
       userId: userResponse.data._id,
-      payload: updatedFields,
+      payload: updatedFields, // Use the payload with image name
     });
   };
 
@@ -167,7 +187,7 @@ export default function PersonalInformation() {
           {!isEditing && (
             <Button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 bg-[#0F3D68] text-white"
+              className="flex items-center gap-2 bg-[#0F3D68] text-white cursor-pointer"
             >
               <UserPen size={16} /> Update Profile
             </Button>
@@ -253,6 +273,24 @@ export default function PersonalInformation() {
               disabled={!isEditing}
             />
           </div>
+
+          {/* Profile Image */}
+          {isEditing && (
+            <div>
+              <label className="block text-sm font-medium mb-2">Profile Picture</label>
+              <Input
+                type="file"
+                name="profileImage"
+                className="h-12"
+                onChange={handleFileChange}
+              />
+              {imageFile && (
+                <div className="mt-2 text-sm">
+                  <p>File Selected: {imageFile.name}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}

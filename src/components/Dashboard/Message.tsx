@@ -86,7 +86,7 @@ export default function Message() {
   const messages = data?.data.items ?? [];
 
   return (
-    <div className="p-4">
+    <div className="py-6 container mx-auto">
       <div className="border border-[#0F3D68] rounded-2xl p-5 mb-6">
         <h1 className="text-2xl font-semibold mb-5">Contacts:</h1>
         <div className="overflow-x-auto">

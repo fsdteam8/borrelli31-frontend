@@ -127,7 +127,7 @@ export default function Assessment() {
                 { title: "Completed Assessment", count: completedCount, icon: "/images/Group2.svg" },
                 { title: "Pending Assessment", count: pendingCount, icon: "/images/Group3.svg" },
               ].map((card, idx) => (
-                <Card key={idx} className="bg-none border border-[#0F3D68] shadow-xl rounded-xl">
+                <Card key={idx} className="bg-[#F4F4F4] border border-[#0F3D68] shadow-xl rounded-xl">
                   <CardContent className="flex items-center p-6">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
                       <Image src={card.icon} alt="icon" height={24} width={24} />
@@ -145,7 +145,7 @@ export default function Assessment() {
 
         {/* --- Table --- */}
         <div className="border border-[#0F3D68] rounded-2xl p-5 mb-6">
-          <h1 className="text-2xl font-semibold mb-5">Latest Assessments:</h1>
+          <h1 className="text-2xl font-semibold mb-5">Free Roof Assessment :</h1>
           <div className="overflow-x-auto">
             <table className="min-w-full border border-[#0F3D68] rounded-xl">
               <thead className="bg-gray-100">

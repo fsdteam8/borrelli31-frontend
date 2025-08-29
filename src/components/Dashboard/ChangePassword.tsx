@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Save, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
-import axios from "axios";
 import { changePassword } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -17,9 +16,7 @@ import { toast } from "sonner";
 const passwordSchema = z
   .object({
     oldPassword: z.string().min(1, "Old password is required"),
-    newPassword: z
-      .string()
-      .min(6, "Password must be at least 8 characters"),
+    newPassword: z.string().min(6, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -32,23 +29,6 @@ const passwordSchema = z
   });
 
 type PasswordFormData = z.infer<typeof passwordSchema>;
-
-// ✅ API call with userId
-async function changePasswordWithUserId(data: {
-  // userId: string;
-  oldPassword: string;
-  newPassword: string;
-}) {
-  try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`,
-      data
-    );
-    return res.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Password change failed");
-  }
-}
 
 export default function ChangePasswordForm() {
   const router = useRouter();
@@ -77,19 +57,17 @@ export default function ChangePasswordForm() {
       if (!session?.user?.id) throw new Error("User not logged in");
 
       const payload = {
-        // userId: session.user.id,
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       };
 
       const res = await changePassword(payload);
       console.log("Password changed:", res);
-      // alert("Password changed successfully!");
-      toast.success("Password changed successfully!")
+      toast.success("Password changed successfully!");
       router.push("/dashboard/setting");
-    } catch (error: any) {
-      console.error("Password change failed:", error.message);
-      alert(`Error: ${error.message}`);
+    } catch {
+      alert(`Error`);
+      toast.warning("Error Message .");
     }
   };
 
@@ -99,7 +77,9 @@ export default function ChangePasswordForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-8 mx-auto container rounded-lg py-20"
       >
-        <h1 className="text-[#131313] text-[18px] font-semibold">Change Password</h1>
+        <h1 className="text-[#131313] text-[18px] font-semibold">
+          Change Password
+        </h1>
 
         <div className="flex flex-col md:flex-row gap-6">
           {[

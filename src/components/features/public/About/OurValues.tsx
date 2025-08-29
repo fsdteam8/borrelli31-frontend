@@ -121,7 +121,7 @@ const features = [
 
 export default function OurValues() {
   return (
-    <section className="py-28">
+    <section className="py-14 lg:py-24">
       <div className="mx-auto container">
         <div className="text-center  mb-10">
           <h1 className=" text-4xl font-bold text-[#063668] mb-2">
@@ -136,7 +136,7 @@ export default function OurValues() {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="bg-white p-4 rounded-xl h-[145px] shadow-2xl transition"
+              className="bg-white p-4 rounded-xl h-[145px] shadow-xl transition"
             >
               <div className="flex gap-3">
                 <div className="">{feature.icon}</div>

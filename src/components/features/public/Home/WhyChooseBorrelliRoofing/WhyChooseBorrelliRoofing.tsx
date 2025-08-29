@@ -116,7 +116,7 @@ export default function WhyChooseBorrelliRoofing() {
 
   return (
     <section className="bg-[#F4F4F4] py-12">
-      <div className="container mx-auto px-4 md:px-20">
+      <div className="container mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-[#0B2F6B]">
             Why Choose Borrelli Roofing

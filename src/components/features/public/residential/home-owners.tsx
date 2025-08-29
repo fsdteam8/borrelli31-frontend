@@ -17,15 +17,15 @@ export default function HomeOwners() {
               provide peace of mind and exceptional value.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="flex flex-col md:flex-row  justify-between items-center gap-8 ">
             <Card className="shadow-[0px_4px_32px_0px_#00000014] p-0 rounded-md">
-              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3">
+              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3  px-4">
                 <Drone className="h-8 w-8" />
                 <CardTitle className="lg:text-5xl text-xl font-bold">
                   Free Drone Inspections
                 </CardTitle>
               </CardHeader>
-              <CardContent className="lg:space-y-10 pb-6 pr-16">
+              <CardContent className="lg:space-y-10 pb-6 pr-16  px-4">
                 <p className="lg:text-lg text-sm">
                   Our cutting-edge drone technology provides a detailed
                   assessment of your roof&apos;s condition without the need for
@@ -59,13 +59,13 @@ export default function HomeOwners() {
             </Card>
 
             <Card className="shadow-[0px_4px_32px_0px_#00000014] p-0 rounded-md">
-              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3">
+              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3  px-4">
                 <FileText className="h-8 w-8" />
                 <CardTitle className="lg:text-5xl text-xl font-bold">
                   Sale-Ready Certifications
                 </CardTitle>
               </CardHeader>
-              <CardContent className="lg:space-y-10 pb-6 pr-16">
+              <CardContent className="lg:space-y-10 pb-6 pr-16   px-4">
                 <p className="lg:text-lg text-sm">
                   Perfect for realtors and home sellers, our roof certification
                   service provides the documentation you need to complete your

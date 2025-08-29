@@ -271,3 +271,31 @@ export async function createMessages(payload: MessagePayload) {
     throw new Error("Failed to create message");
   }
 }
+
+// Get All Our Roofing Services
+export async function getRoofingServices() {
+  try {
+    const response = await api.get("/services");
+    return response.data;
+  } catch {
+    throw "Failed reviews approved";
+  }
+}
+
+interface AssessmentData {
+  fullName: string;
+  email: string;
+  phone: string;
+  propertyAddress: string;
+  service: string;
+}
+
+// create assessments
+export async function createAssessment(data: AssessmentData) {
+  try {
+    const res = await api.post("/assessments", data);
+    return res.data;
+  } catch {
+    throw "Faild assessments Data"
+  }
+}
