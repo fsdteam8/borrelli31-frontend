@@ -13,7 +13,7 @@ export default function DashboardLayout({
       </div>
       <div className="w-full bg-[#F4F4F4]">
         <DashboardHeader />
-        {children}
+        <main className="w-[calc(100vw-220px)] ms-auto">{children}</main>
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#131313] text-white py-16">
+    <footer className="bg-[#131313] text-white p-12">
       <div className="container mx-auto px-4">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Left Section */}
-          <div className="md:col-span-6 space-y-4">
+          <div className="md:col-span-6 space-y-3">
             <Image
               src={"/Borrelli_Logo.svg"}
               alt="Borrelli Roofing Logo"
@@ -36,7 +36,7 @@ const Footer = () => {
                   height="16"
                   viewBox="0 0 17 16"
                   fill="none"
-                  className="w-6 h-6 "
+                  className="w-5 h-5"
                 >
                   <path
                     d="M9.72101 11.044C9.85869 11.1073 10.0138 11.1217 10.1608 11.085C10.3078 11.0483 10.4379 10.9626 10.5297 10.842L10.7663 10.532C10.8905 10.3664 11.0516 10.232 11.2367 10.1395C11.4219 10.0469 11.626 9.9987 11.833 9.9987H13.833C14.1866 9.9987 14.5258 10.1392 14.7758 10.3892C15.0259 10.6393 15.1663 10.9784 15.1663 11.332V13.332C15.1663 13.6857 15.0259 14.0248 14.7758 14.2748C14.5258 14.5249 14.1866 14.6654 13.833 14.6654C10.6504 14.6654 7.59816 13.4011 5.34773 11.1506C3.09729 8.90021 1.83301 5.84796 1.83301 2.66536C1.83301 2.31174 1.97348 1.9726 2.22353 1.72256C2.47358 1.47251 2.81272 1.33203 3.16634 1.33203H5.16634C5.51996 1.33203 5.8591 1.47251 6.10915 1.72256C6.3592 1.9726 6.49967 2.31174 6.49967 2.66536V4.66536C6.49967 4.87236 6.45148 5.07651 6.35891 5.26165C6.26634 5.44679 6.13194 5.60784 5.96634 5.73203L5.65434 5.96603C5.53195 6.05948 5.44569 6.19242 5.4102 6.34227C5.37472 6.49211 5.3922 6.64962 5.45967 6.78803C6.3708 8.63861 7.86929 10.1352 9.72101 11.044Z"
@@ -57,7 +57,7 @@ const Footer = () => {
                   height="16"
                   viewBox="0 0 17 16"
                   fill="none"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                 >
                   <path
                     d="M15.1663 4.66797L9.17234 8.48597C8.96894 8.60411 8.7379 8.66634 8.50267 8.66634C8.26745 8.66634 8.03641 8.60411 7.83301 8.48597L1.83301 4.66797"
@@ -85,7 +85,7 @@ const Footer = () => {
                   height="16"
                   viewBox="0 0 17 16"
                   fill="none"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                 >
                   <g clip-path="url(#clip0_27015_658)">
                     <path
@@ -128,7 +128,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-[#D9D9D94D] mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-[#D9D9D94D] mt-6 pt-6 flex flex-col md:flex-row justify-between items-center">
           <span className="text-base text-[#FFF]">
             © {new Date().getFullYear()} Borrelli Roofing. All rights reserved.
           </span>

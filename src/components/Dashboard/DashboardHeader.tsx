@@ -54,7 +54,7 @@ export default function DashboardHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white border-b">
+    <header className="flex items-center justify-between px-6 py-6 bg-white border-b">
       <h1 className="text-2xl font-bold">Dashboard</h1>
 
       {/* Profile */}
@@ -69,7 +69,7 @@ export default function DashboardHeader() {
           </div>
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300">
             <Image
-              src={user.profileImage || "/images/founderImage.png"}
+              src={ "/images/founderImage.png"}
               alt="Profile"
               width={40}
               height={40}

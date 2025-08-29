@@ -1,109 +1,47 @@
 "use client";
 
 import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
+import { getRoofingServices } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 
 // --- Types ---
 interface Service {
-  id: string;
-  title: string;
-  features: string[];
-  button: string;
-  imgSrc: string;
-  alt: string;
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  btnText: string;
+  imageUrl: string;
   serviceValue: string;
 }
-
-interface FormData {
-  fullName: string;
-  email: string;
-  phone?: string;
-  message?: string;
-  selectedService?: string;
-}
-
-const services: Service[] = [
-  {
-    id: "new-roof-installation",
-    title: "New Roof Installations",
-    features: [
-      "Premium Asphalt Shingle Roofs",
-      "Durable Metal Roofing Systems",
-      "Synthetic & Specialty Materials",
-    ],
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs1.png",
-    alt: "New Roof Installations",
-    serviceValue: "new-roof-installation",
-  },
-  {
-    id: "roof-repairs",
-    title: "Roof Repairs",
-    features: [
-      "Leak Detection & Repair",
-      "Flashing & Vent Boot Replacement",
-      "Missing/Damaged Shingle Replacement",
-    ],
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs2.png",
-    alt: "Roof Repairs",
-    serviceValue: "roof-repairs",
-  },
-  {
-    id: "storm-damage-assessments",
-    title: "Storm Damage Assessments",
-    features: [
-      "Comprehensive Damage Evaluation",
-      "Insurance Claim Assistance",
-      "Emergency Tarp Services",
-    ],
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs3.png",
-    alt: "Storm Damage Assessments",
-    serviceValue: "storm-damage-assessments",
-  },
-  {
-    id: "real-estate-certifications",
-    title: "Real Estate Certifications",
-    features: [
-      "Premium Asphalt Shingle Roofs",
-      "Sale-Ready Roof Certifications",
-      "Buyer's Inspection Reports",
-    ],
-    button: "Get Insurance Claim Support",
-    imgSrc: "/images/cs/cs4.png",
-    alt: "Real Estate Certifications",
-    serviceValue: "real-estate-certifications",
-  },
-  {
-    id: "gutter-services",
-    title: "Gutter Services",
-    features: [
-      "Seamless Gutter Installation",
-      "Gutter Repair & Maintenance",
-      "Premium Gutter Guard Systems",
-    ],
-    button: "Get a Free Drone Inspection",
-    imgSrc: "/images/cs/cs5.png",
-    alt: "Gutter Services",
-    serviceValue: "gutter-services",
-  },
-];
 
 export default function ResidentialServices() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
+
+  const {
+    data: Residential,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["roofing"],
+    queryFn: () => getRoofingServices(),
+  });
+
+  // Filter services based on the "Residential" category and reverse the order
+  const filteredServices = Residential?.data
+    ?.filter((service: Service) => service.category === "Residential")
+    .reverse();
 
   const handleServiceSelect = (serviceValue: string) => {
     setPreselectedService(serviceValue);
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: FormData) => {
-    console.log("Form submission:", data);
-    // Add your custom API call or processing logic here
-  };
+  if (isLoading) return <div>Loading....</div>;
+  if (isError) return <div>Error ....</div>;
 
   return (
     <section className="bg-[#F4F4F4] py-8 lg:py-20">
@@ -118,38 +56,34 @@ export default function ResidentialServices() {
       </div>
 
       <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((service) => (
+        {filteredServices?.map((service: Service) => (
           <div
-            key={service.id}
+            key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imgSrc}
-                alt={service.alt}
+                src={service.imageUrl || "/images/placeholder.png"} // Fallback if image URL is missing
+                alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
               />
             </div>
             <div className="p-4 space-y-3">
               <h1 className="text-2xl font-semibold text-[#2A2A2A] mb-1">
-                {service.title}
+                {service.name}
               </h1>
-              <ul>
-                {service.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="text-[#4F4F4F] mb-1 list-disc list-inside"
-                  >
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+              <div
+                className="text-[#4F4F4F] mb-4"
+                dangerouslySetInnerHTML={{
+                  __html: service.description,
+                }}
+              />
               <button
-                onClick={() => handleServiceSelect(service.serviceValue)}
+                onClick={() => handleServiceSelect(service._id)}
                 className="bg-[#23547B] hover:bg-[#183c5a] duration-300 text-white px-6 py-2 rounded-md mb-2 cursor-pointer"
               >
-                {service.button}
+                {service.btnText}
               </button>
             </div>
           </div>
@@ -160,7 +94,6 @@ export default function ResidentialServices() {
       <RoofingInquiryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleFormSubmit}
         preselectedService={preselectedService}
       />
     </section>

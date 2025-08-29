@@ -12,6 +12,9 @@ import {
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Check, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createAssessment, getRoofingServices } from "@/lib/api";
+import { toast } from "sonner";
 
 interface FormData {
   fullName: string;
@@ -31,7 +34,6 @@ interface RoofingInquiryModalProps {
 export default function RoofingInquiryModal({
   isOpen = true,
   onClose = () => {},
-  onSubmit,
   preselectedService,
 }: RoofingInquiryModalProps) {
   const [formData, setFormData] = useState<FormData>({
@@ -41,6 +43,19 @@ export default function RoofingInquiryModal({
     address: "",
     service: "",
   });
+
+  const {
+    data,
+    // isLoading,
+    // isError,
+  } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => getRoofingServices(),
+    select: (data) => data?.data,
+  });
+
+  console.log("this is card data", data);
+
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -90,24 +105,24 @@ export default function RoofingInquiryModal({
 
     setIsSubmitting(true);
 
-    try {
-      if (onSubmit) {
-        await onSubmit(formData);
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Form submitted:", formData);
-      }
+    const assessmentData = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      propertyAddress: formData.address,
+      service: formData.service,
+    };
+    console.log(assessmentData)
 
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        address: "",
-        service: "",
-      });
+    try {
+      const response = await createAssessment(assessmentData);
+      console.log("Assessment created successfully:", response);
+      toast.success("Your request has been submitted successfully!");
+
       onClose();
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error("Error creating assessment:", error);
+      toast.error("There was an error submitting your request.");
     } finally {
       setIsSubmitting(false);
     }
@@ -305,29 +320,17 @@ export default function RoofingInquiryModal({
                           handleInputChange("service", value)
                         }
                         value={formData.service}
+                        defaultValue={preselectedService}
                       >
                         <SelectTrigger className="h-10 w-full lg:!h-[49px] cursor-pointer py-3 text-sm lg:text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
                         <SelectContent className="py-3">
-                          <SelectItem value="drone-inspection">
-                            Free Drone Inspection & Estimate
-                          </SelectItem>
-                          <SelectItem value="sale-ready-certification">
-                            Sale-Ready Roof Certification
-                          </SelectItem>
-                          <SelectItem value="commercial-installation">
-                            Commercial Roof Installation
-                          </SelectItem>
-                          <SelectItem value="residential-installation">
-                            Residential Roof Installation
-                          </SelectItem>
-                          <SelectItem value="residential-repairs">
-                            Residential Repairs & Gutters
-                          </SelectItem>
-                          <SelectItem value="insurance-claim-support">
-                            Insurance Photos & Claim Support
-                          </SelectItem>
+                          {data?.map((item: { _id: string; name: string }) => (
+                            <SelectItem value={item._id} key={item._id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       {errors.service && (

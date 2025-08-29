@@ -1,96 +1,44 @@
 import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
+import { getRoofingServices } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 
 interface Service {
-  id: string;
-  title: string;
+  _id: string;
+  name: string;
+  category: string;
   description: string;
-  button: string;
-  imgSrc: string;
-  alt: string;
-  serviceValue: string;
+  btnText: string;
+  imageUrl: string;
+  serviceValue: string; // Adjust this based on the API response structure
 }
-
-
-const services: Service[] = [
-  {
-    id: "drone-inspection",
-    title: "Free Drone Inspections & Estimates",
-    description: "Roof assessments without ladder climbing.",
-    button: "Get a Free Drone Inspection & Estimate",
-    imgSrc: "/images/image1.png",
-    alt: "Drone inspection",
-    serviceValue: "drone-inspection",
-  },
-  {
-    id: "sale-ready",
-    title: "Sale-Ready Roof Certifications",
-    description:
-      "Professional documentation for real estate transactions and peace of mind.",
-    button: "Get a Sale-Ready Roof Certification",
-    imgSrc: "/images/image2.png",
-    alt: "Roof certification",
-    serviceValue: "sale-ready-certification",
-  },
-  {
-    id: "commercial",
-    title: "Commercial Roof Installations",
-    description:
-      "Expert installation for businesses, warehouses, and commercial properties.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image3.png",
-    alt: "Commercial Roof Installations",
-    serviceValue: "commercial-installation",
-  },
-  {
-    id: "residential",
-    title: "Residential Roof Installations",
-    description:
-      "Quality materials and craftsmanship for homes of all sizes and styles.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image4.png",
-    alt: "Residential Roof Installations",
-    serviceValue: "residential-installation",
-  },
-  {
-    id: "repairs",
-    title: "Residential Repairs & Gutters",
-    description:
-      "Prompt repair services and gutter solutions to protect your home.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/image5.png",
-    alt: "Residential Repairs & Gutters",
-    serviceValue: "residential-repairs",
-  },
-  {
-    id: "insurance",
-    title: "Insurance Photos & Claim Support",
-    description:
-      "Documentation and assistance with insurance claims after storm damage.",
-    button: "Get a Sale-Ready Roof Certification",
-    imgSrc: "/images/image6.png",
-    alt: "Get Insurance Claim Support",
-    serviceValue: "insurance-claim-support",
-  },
-];
-
- 
 
 export default function ServiceCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
+
+  const {
+    data: roofing,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["roofing"],
+    queryFn: () => getRoofingServices(),
+  });
+
+  // Filter services based on the "Roofing" category and reverse the order
+  const filteredServices = roofing?.data
+    ?.filter((service: Service) => service.category === "Roofing")
+    .reverse();  
 
   const handleServiceSelect = (serviceValue: string) => {
     setPreselectedService(serviceValue);
     setIsModalOpen(true);
   };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleFormSubmit = async (data: any) => {
-    console.log("Form submission:", data);
-    // Add your custom API call or processing logic here
-  };
+  if (isLoading) return <div>Loading....</div>;
+  if (isError) return <div>Error ....</div>;
 
   return (
     <section className="bg-[#F4F4F4]">
@@ -104,30 +52,33 @@ export default function ServiceCard() {
         </p>
       </div>
 
-      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        {services.map((service, index) => (
+      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-10">
+        {filteredServices?.map((service: Service, index: number) => (
           <div
             key={index}
-            className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
+            className="bg-[#F8F5F2] rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imgSrc}
-                alt={service.alt}
+                src={service.imageUrl || "/images/placeholder.png"} // Use the image URL from the API, or a placeholder if it's missing
+                alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
               />
             </div>
             <div className="p-4">
               <h1 className="text-2xl font-semibold text-[#2A2A2A] mb-1">
-                {service.title}
+                {service.name}
               </h1>
-              <p className="text-[#68706A] mb-4">{service.description}</p>
+              <p
+                className="text-[#68706A] mb-4"
+                dangerouslySetInnerHTML={{ __html: service.description }}
+              />
               <button
-                onClick={() => handleServiceSelect(service.serviceValue)}
+                onClick={() => handleServiceSelect(service._id)}
                 className="bg-[#23547B] hover:bg-[#183c5a] duration-300 text-white px-6 py-2 rounded-md mb-2 cursor-pointer"
               >
-                {service.button}
+                {service.btnText}
               </button>
             </div>
           </div>
@@ -138,7 +89,6 @@ export default function ServiceCard() {
       <RoofingInquiryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleFormSubmit}
         preselectedService={preselectedService}
       />
     </section>

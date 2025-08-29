@@ -109,7 +109,7 @@ export default function Dashboard() {
                     key={p}
                     variant="outline"
                     size="sm"
-                    className={`border-gray-300 text-gray-700 hover:bg-gray-50 ${
+                    className={`border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer ${
                       period === p ? "bg-gray-100" : "bg-transparent"
                     }`}
                     onClick={() => setPeriod(p as "12m" | "06m" | "30d" | "7d")}

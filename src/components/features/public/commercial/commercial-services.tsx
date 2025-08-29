@@ -1,104 +1,51 @@
 "use client";
 
 import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
+import { getRoofingServices } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 
 // --- Types ---
 interface Service {
-  id: string;
-  title: string;
+  _id: string;
+  name: string;
+  category: string;
   description: string;
-  button: string;
-  imgSrc: string;
+  btnText: string;
+  imageUrl: string;
   alt: string;
   serviceValue: string;
 }
 
-const services: Service[] = [
-  {
-    id: "new-roof-installation",
-    title: "New Roof Installation",
-    description: "TPO, PVC, EPDM, and other commercial-grade materials installed by certified professionals.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs1.png",
-    alt: "New Roof Installation",
-    serviceValue: "new-roof-installation",
-  },
-  {
-    id: "roof-replacement",
-    title: "Roof Replacement",
-    description:
-      "Full tear-off or TPO overlay options to suit your building's needs and budget.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs2.png",
-    alt: "Roof Replacement",
-    serviceValue: "roof-replacement",
-  },
-  {
-    id: "roof-coating",
-    title: "Roof Coating & Restoration",
-    description:
-      "Silicone or acrylic coating solutions to extend roof life and improve energy efficiency.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs3.png",
-    alt: "Roof Coating & Restoration",
-    serviceValue: "roof-coating",
-  },
-  {
-    id: "insurance-claim-support",
-    title: "Insurance Claim Support",
-    description:
-      "Comprehensive documentation and insurance liaison services for damage claims.",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs4.png",
-    alt: "Insurance Claim Support",
-    serviceValue: "insurance-claim-support",
-  },
-  {
-    id: "drone-inspections",
-    title: "Drone Inspections & Imaging",
-    description:
-      "High-resolution imaging for rapid, safe issue detection",
-    button: "Get a Free Inspection & Estimate",
-    imgSrc: "/images/cs/cs5.png",
-    alt: "Drone Inspections & Imaging",
-    serviceValue: "drone-inspections",
-  },
-  {
-    id: "storm-damage-assessments",
-    title: "Storm Damage Assessments",
-    description:
-      "Rapid response evaluations after severe weather events to prevent further damage.",
-    button: "Get a Sale-Ready Roof Certification",
-    imgSrc: "/images/cs/cs6.png",
-    alt: "Storm Damage Assessments",
-    serviceValue: "storm-damage-assessments",
-  },
-];
-
-interface FormData {
-  fullName: string;
-  email: string;
-  phone?: string;
-  message?: string;
-  selectedService?: string;
-}
+ 
 
 export default function CommercialServices() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
 
-  const handleServiceSelect = (serviceValue: string) => {
-    setPreselectedService(serviceValue);
+  const {
+    data: commercial,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["roofing"],
+    queryFn: () => getRoofingServices(),
+  });
+
+  // Filter services based on the "Commercial" category
+  const filteredServices = commercial?.data
+    ?.filter((service: Service) => service.category === "Commercial")
+    .reverse();
+
+  const handleServiceSelect = (serviceId: string) => {
+    setPreselectedService(serviceId);
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: FormData) => {
-    console.log("Form submission:", data);
-    // Add your custom API call or processing logic here
-  };
-
+  if(isLoading) return <div>Loading....</div>
+  if(isError) return <div>Error ....</div>
+ 
   return (
     <section className="bg-[#F4F4F4] py-8 lg:py-20">
       <div className="text-center mb-10 px-4">
@@ -112,14 +59,14 @@ export default function CommercialServices() {
       </div>
 
       <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((service) => (
+        {filteredServices?.map((service: Service) => (
           <div
-            key={service.id}
+            key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imgSrc}
+                src={service.imageUrl || "/images/placeholder.png"}
                 alt={service.alt}
                 fill
                 className="object-cover rounded-2xl"
@@ -127,14 +74,14 @@ export default function CommercialServices() {
             </div>
             <div className="p-4">
               <h1 className="text-2xl font-semibold text-[#2A2A2A] mb-1">
-                {service.title}
+                {service.name}
               </h1>
               <p className="text-[#68706A] mb-4">{service.description}</p>
               <button
-                onClick={() => handleServiceSelect(service.serviceValue)}
+                onClick={() => handleServiceSelect(service._id)}
                 className="bg-[#23547B] hover:bg-[#183c5a] duration-300 text-white px-6 py-2 rounded-md mb-2 cursor-pointer"
               >
-                {service.button}
+                {service.btnText}
               </button>
             </div>
           </div>
@@ -145,7 +92,6 @@ export default function CommercialServices() {
       <RoofingInquiryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleFormSubmit}
         preselectedService={preselectedService}
       />
     </section>

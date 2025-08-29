@@ -128,7 +128,7 @@ export default function Dashboard() {
                   className="border bg-0 border-[#0F3D68] shadow-xl rounded-xl"
                 >
                   <CardContent className="flex items-center p-6">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
+                    <div className="flex h-16 w-16  items-center justify-center rounded-full bg-[#0F3D68]">
                       <Image
                         src={card.icon}
                         alt={`icon-${idx}`}
@@ -155,7 +155,7 @@ export default function Dashboard() {
         {/* --- Table --- */}
         <div className="border border-[#0F3D68] rounded-2xl p-5 mb-6">
           <div className="rounded-2xl p-5 mb-6">
-            <h1 className="text-2xl font-semibold">Latest Assessments:</h1>
+            <h1 className="text-2xl font-semibold">Free Roof Assessment:</h1>
           </div>
 
           <div className="overflow-x-auto">

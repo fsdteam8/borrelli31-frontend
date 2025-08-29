@@ -66,7 +66,7 @@ export default function Login() {
     <div className="flex items-center justify-center h-screen bg-gray-50 px-4">
       <div className="relative w-full max-w-xl">
         {/* Logo outside card */}
-        <div className="flex justify-center -mt-20 mb-6">
+        <div className="flex justify-center mb-6">
           <Image
             src="/Borrelli_Logo.svg"
             alt="Smarter Roofing Services"
@@ -78,7 +78,7 @@ export default function Login() {
         </div>
 
         {/* Card */}
-        <div className="w-full p-8 rounded-2xl shadow-xl bg-white">
+        <div className="w-full p-8 rounded-2xl shadow-xl bg-white mt-12">
           {/* Welcome Text */}
           <h1 className="text-[#131313] text-3xl font-bold mb-1 text-left">
             Welcome 👋
@@ -143,7 +143,7 @@ export default function Login() {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="m-0 cursor-pointer text-gray-600">
+                      <FormLabel className="m-0 cursor-pointer text-[#131313]">
                         Remember Me
                       </FormLabel>
                     </FormItem>
@@ -151,7 +151,7 @@ export default function Login() {
                 />
                 <a
                   href="/forgot-password"
-                  className="text-[#0F3D68] cursor-pointer hover:underline font-medium"
+                  className="text-[#131313] text-sm cursor-pointer hover:underline font-medium"
                 >
                   Forgot password?
                 </a>

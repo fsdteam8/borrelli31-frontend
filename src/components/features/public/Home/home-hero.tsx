@@ -58,7 +58,8 @@ export default function HomeHero() {
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Houston&apos;s Trusted <span className="text-primary">Roofing</span> Partner for
+              Houston&apos;s Trusted{" "}
+              <span className="text-primary">Roofing</span> Partner for
               Residential & Commercial Projects
             </h1>
 
@@ -71,10 +72,15 @@ export default function HomeHero() {
             {/* CTA Button */}
             <Button
               onClick={() => setIsModalOpen(true)}
-              className="bg-primary cursor-pointer hover:bg-primary-dark h-[56px] text-white !px-8 py-4 text-lg font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2"
+              className="bg-primary cursor-pointer hover:bg-primary-dark 
+             h-[48px] sm:h-[56px] 
+             text-white !px-4 sm:!px-8 py-2 sm:py-4 
+             text-base sm:text-lg font-semibold 
+             rounded-lg transition-colors duration-200 
+             flex items-center gap-2"
             >
               Get a Free Drone Inspection & Estimate
-              <FaArrowRightLong className="w-5 h-5" />
+              <FaArrowRightLong className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
         </div>

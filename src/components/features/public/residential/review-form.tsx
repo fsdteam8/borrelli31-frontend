@@ -163,7 +163,7 @@ export function ReviewForm() {
                 />
               </div>
 
-              <Button type="submit" disabled={mutation.isPending}>
+              <Button type="submit" disabled={mutation.isPending} className="cursor-pointer">
                 {mutation.isPending ? "Submitting..." : "Submit Review"}
               </Button>
             </form>

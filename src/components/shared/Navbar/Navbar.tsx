@@ -62,7 +62,7 @@ export default function Navbar() {
                   href={item.href}
                   className={cn(
                     "text-base font-medium transition-colors hover:text-primary",
-                    pathname === item.href ? "text-primary" : "text-foreground"
+                    pathname === item.href ? "text-primary underline" : "text-foreground"
                   )}
                 >
                   {item.title}

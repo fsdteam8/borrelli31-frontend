@@ -114,7 +114,7 @@ export default function Reviews() {
               items: newItems,
               meta: {
                 ...oldData.data.meta,
-                totalData: oldData.data.meta.totalData - 1,  
+                totalData: oldData.data.meta.totalData - 1,
               },
             },
           };
@@ -142,7 +142,7 @@ export default function Reviews() {
   return (
     <div className="mx-auto container py-10 space-y-10">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border border-[#0F3D68] p-4 rounded-2xl">
         <Card className="bg-transparent border border-[#0F3D68] shadow-xl rounded-xl">
           <CardContent className="flex items-center p-6">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0F3D68]">
@@ -200,74 +200,76 @@ export default function Reviews() {
       </div>
 
       {/* Reviews List */}
-      <div className="border border-[#0F3D68] rounded-xl overflow-hidden">
-        <div className="flex justify-between items-center p-6 border-b border-[#0F3D68]">
-          <h2 className="text-lg font-semibold">Recent Reviews</h2>
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search Reviews..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0F3D68]"
-            />
-          </div>
-        </div>
 
-        <div>
-          {filteredItems.map((review) => (
-            <div
-              key={review._id}
-              className="p-6 grid grid-cols-12 md:flex-row border-b border-[#0F3D68]"
-            >
-              <div className="grid col-span-3">
-                <div className="flex items-center space-x-4">
-                  <Avatar className="h-20 w-20">
-                    <AvatarFallback>
-                      {review.fullName?.[0] || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium">{review.fullName}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  Rating
-                  <div className="flex items-center space-x-1">
-                    {Array.from({ length: review.rating }).map((_, i) => (
-                      <Star key={i} className="text-yellow-400 w-5 h-5" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid col-span-9">
-                <div className="flex-1 text-gray-700 py-6">
-                  {review.description}
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleApprove(review._id)}
-                    className="px-2 py-1 w-full bg-[#0F3D68] text-white rounded-md cursor-pointer"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => handleDecline(review._id)}
-                    className="px-2 py-1 w-full rounded-md border border-[#0F3D68] text-[#0F3D68] cursor-pointer"
-                  >
-                    Decline
-                  </button>
-                </div>
-              </div>
+      <div className="border border-[#0F3D68]   p-4 rounded-2xl">
+        <div className="overflow-hidden">
+          <div className="flex justify-between items-center p-6  ">
+            <h2 className="text-2xl font-semibold">Recent Reviews:</h2>
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search Reviews..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0F3D68]"
+              />
             </div>
-          ))}
+          </div>
 
+          <div className="space-y-4 ">
+            {filteredItems.map((review) => (
+              <div
+                key={review._id}
+                className=" grid grid-cols-12  md:flex-row border border-[#0F3D68] rounded-2xl p-4"
+              >
+                <div className="grid col-span-3 ">
+                  <div className="flex items-center space-x-4">
+                    <Avatar className="h-20 w-20">
+                      <AvatarFallback>
+                        {review.fullName?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">{review.fullName}</p>
+                      <p className="text-sm text-gray-500">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    Rating
+                    <div className="flex items-center space-x-1">
+                      {Array.from({ length: review.rating }).map((_, i) => (
+                        <Star key={i} className="text-yellow-400 w-5 h-5" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid col-span-9">
+                  <div className="flex-1 text-gray-700 py-6">
+                    {review.description}
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleApprove(review._id)}
+                      className="px-2 py-1 w-full bg-[#0F3D68] text-white rounded-md cursor-pointer"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => handleDecline(review._id)}
+                      className="px-2 py-1 w-full rounded-md border border-[#0F3D68] text-[#0F3D68] cursor-pointer"
+                    >
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
           {filteredItems.length === 0 && (
             <p className="text-center py-6 text-gray-500">No reviews found.</p>
           )}

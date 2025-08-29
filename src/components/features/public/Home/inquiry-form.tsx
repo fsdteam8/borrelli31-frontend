@@ -142,9 +142,9 @@ export default function InquiryForm() {
   );
 
   return (
-    <section className="bg-[url('/images/image7.jpg')] bg-cover bg-center relative lg:mt-[72px] mt-10">
+    <section className="bg-[url('/images/image7.jpg')] bg-cover bg-center relative">
       <div className="bg-red-950/40">
-        <div className=" relative z-10 flex flex-col lg:flex-row w-full h-[687px] container mx-auto  overflow-y-auto lg:overflow-hidden">
+        <div className=" relative z-10 flex flex-col lg:flex-row w-full h-[1100px] md:h-[687px] m container mx-auto   lg:overflow-hidden">
           {/* Left Side - Title and Benefits */}
           <div className="flex-2 p-4 pt-16 flex flex-col justify-center">
             <div className="">
