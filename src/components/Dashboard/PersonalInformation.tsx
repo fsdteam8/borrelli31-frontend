@@ -138,7 +138,7 @@ export default function PersonalInformation() {
             Dashboard
           </Link>
           <span>&gt;</span>
-          <Link href="/dashboard/settings" className="hover:underline">
+          <Link href="/dashboard/setting" className="hover:underline">
             Settings
           </Link>
           <span>&gt;</span>
