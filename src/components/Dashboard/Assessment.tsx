@@ -187,15 +187,19 @@ export default function Assessment() {
         a._id === id ? { ...a, status } : a
       );
 
-      queryClient.setQueryData(
+      queryClient.setQueryData<AssessmentPaginationResponse>(
         ["assessments", currentPage, limit],
-        (oldData: any) => ({
-          ...oldData,
-          data: {
-            ...oldData.data,
-            items: updated,
-          },
-        })
+        (oldData) => {
+          if (!oldData) return oldData;  
+
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              items: updated,
+            },
+          };
+        }
       );
     } catch (error) {
       console.error(error);
@@ -310,8 +314,8 @@ export default function Assessment() {
                             }
                             className={`px-2 py-1 rounded  text-sm cursor-pointer border ${
                               a.status === "COMPLETED"
-                                ? "bg-[#016102] border-[#016102] text-white"  
-                                : "border-[#016102]  bg-transparent "  
+                                ? "bg-[#016102] border-[#016102] text-white"
+                                : "border-[#016102]  bg-transparent "
                             }`}
                           >
                             COMPLETED
@@ -321,8 +325,8 @@ export default function Assessment() {
                             onClick={() => handleStatusChange(a._id, "PENDING")}
                             className={`px-2 py-1 rounded text-sm cursor-pointer border ${
                               a.status === "PENDING"
-                                ? "bg-[#E2BF64] border-[#E2BF64] text-white"  
-                                : "border-[#E2BF64]   bg-transparent text-black"  
+                                ? "bg-[#E2BF64] border-[#E2BF64] text-white"
+                                : "border-[#E2BF64]   bg-transparent text-black"
                             }`}
                           >
                             PENDING

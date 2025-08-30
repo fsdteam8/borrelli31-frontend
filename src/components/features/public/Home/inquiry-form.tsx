@@ -26,15 +26,7 @@ interface FormData {
 
 type FormErrors = Partial<FormData>;
 
-const SERVICE_OPTIONS = [
-  { value: "inspection", label: "Free Drone Inspection" },
-  { value: "repair", label: "Roof Repair" },
-  { value: "replacement", label: "Roof Replacement" },
-  { value: "maintenance", label: "Roof Maintenance" },
-  { value: "certification", label: "Sale-Ready Certification" },
-  { value: "storm-damage", label: "Storm Damage Assessment" },
-] as const;
-
+ 
 const BENEFITS = [
   "No-obligation assessment of your roof's condition",
   "High-resolution drone imagery for accurate evaluation",
@@ -148,16 +140,6 @@ export default function InquiryForm() {
             {benefit}
           </span>
         </div>
-      )),
-    []
-  );
-
-  const serviceOptions = useMemo(
-    () =>
-      SERVICE_OPTIONS.map(({ value, label }) => (
-        <SelectItem key={value} value={value}>
-          {label}
-        </SelectItem>
       )),
     []
   );
