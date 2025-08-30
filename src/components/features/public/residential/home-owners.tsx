@@ -1,9 +1,19 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Drone, FileText, MoveRight } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
 
 export default function HomeOwners() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [preselectedService, setPreselectedService] = useState<string>("");
+
+  const handleServiceSelect = (serviceValue: string) => {
+    setPreselectedService(serviceValue);
+    setIsModalOpen(true);
+  };
+
   return (
     <section className="bg-[#E7E7E78F] py-8 lg:py-20">
       <div className="container">
@@ -52,7 +62,10 @@ export default function HomeOwners() {
                     </span>
                   </li>
                 </ul>
-                <Button className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0">
+                <Button
+                  onClick={() => handleServiceSelect("")}
+                  className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0"
+                >
                   Get a Free Drone Inspection & Estimate <MoveRight />
                 </Button>
               </CardContent>
@@ -92,12 +105,21 @@ export default function HomeOwners() {
                     </span>
                   </li>
                 </ul>
-                <Button className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0">
+                <Button
+                  onClick={() => handleServiceSelect("")}
+                  className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0"
+                >
                   Request Certification <MoveRight />
                 </Button>
               </CardContent>
             </Card>
           </div>
+
+          {/* Modal for inquiry form */}
+          <RoofingInquiryModal
+            isOpen={isModalOpen}
+            preselectedService={preselectedService}
+          />
         </div>
       </div>
     </section>

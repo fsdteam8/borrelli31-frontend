@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import AssessmentDetails from "./AssessmentDetails";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Loader2, LogOut, FileWarning, Database } from "lucide-react";
 
 // --- Types ---
 interface Service {
@@ -61,10 +63,64 @@ export default function Dashboard() {
   }
 
   if (status === "loading")
-    return <div suppressHydrationWarning>Loading session...</div>;
-  if (!session) return <div suppressHydrationWarning>You are not logged in.</div>;
-  if (isLoading) return <div suppressHydrationWarning>Loading assessments...</div>;
-  if (isError) return <div suppressHydrationWarning>Failed to load assessments.</div>;
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <Alert className="max-w-md text-center border-blue-400 bg-blue-50">
+          <Loader2 className="h-6 w-6 animate-spin text-blue-600 mx-auto mb-2" />
+          <AlertTitle className="font-semibold text-blue-700">
+            Loading session...
+          </AlertTitle>
+          <AlertDescription className="text-sm text-blue-500">
+            Please wait while we check your account.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+
+  if (!session)
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <Alert className="max-w-md text-center border-red-400 bg-red-50">
+          <LogOut className="h-6 w-6 text-red-600 mx-auto mb-2" />
+          <AlertTitle className="font-semibold text-red-700">
+            You are not logged in
+          </AlertTitle>
+          <AlertDescription className="text-sm text-red-500">
+            Please sign in to access your dashboard.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <Alert className="max-w-md text-center border-indigo-400 bg-indigo-50">
+          <Database className="h-6 w-6 animate-bounce text-indigo-600 mx-auto mb-2" />
+          <AlertTitle className="font-semibold text-indigo-700">
+            Loading assessments...
+          </AlertTitle>
+          <AlertDescription className="text-sm text-indigo-500">
+            Fetching your recent assessments, please hold on.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <Alert className="max-w-md text-center border-orange-400 bg-orange-50">
+          <FileWarning className="h-6 w-6 text-orange-600 mx-auto mb-2" />
+          <AlertTitle className="font-semibold text-orange-700">
+            Failed to load assessments
+          </AlertTitle>
+          <AlertDescription className="text-sm text-orange-500">
+            Something went wrong. Please refresh the page or try again later.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
 
   const assessments = (data?.data.items ?? []).slice(-6).reverse();
 
@@ -169,10 +225,7 @@ export default function Dashboard() {
                     "Assessment Status",
                     "Assessment Info",
                   ].map((header, idx) => (
-                    <th
-                      key={idx}
-                      className="px-4 py-2 border border-[#0F3D68]"
-                    >
+                    <th key={idx} className="px-4 py-2 border border-[#0F3D68]">
                       {header}
                     </th>
                   ))}
