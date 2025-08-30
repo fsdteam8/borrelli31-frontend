@@ -76,7 +76,7 @@ export default function DashboardSidebar() {
 
         {/* Menu */}
         <nav className="flex-1 px-5 py-3 ">
-          <ul className="space-y-1">
+          <ul className="space-y-3">
             {menu.map((m) => {
               const isActive = active === m.id;
               const Icon = m.icon;
@@ -84,7 +84,7 @@ export default function DashboardSidebar() {
                 <li key={m.id}>
                   <button
                     onClick={() => handleNavigation(m.id)}
-                    className={`group relative flex items-center gap-3 w-full text-left px-3 py-2 rounded-md mx-2 transition-colors duration-150 cursor-pointer
+                    className={`group relative flex items-center gap-3 h-12  w-full text-left px-3 py-2 rounded-md mx-2 transition-colors duration-150 cursor-pointer
                       ${
                         isActive
                           ? "bg-[#0F3D68] text-[18px] text-white"

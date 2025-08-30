@@ -54,8 +54,6 @@ export default function RoofingInquiryModal({
     select: (data) => data?.data,
   });
 
-  console.log("this is card data", data);
-
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -112,11 +110,10 @@ export default function RoofingInquiryModal({
       propertyAddress: formData.address,
       service: formData.service,
     };
-    console.log(assessmentData)
 
     try {
-      const response = await createAssessment(assessmentData);
-      console.log("Assessment created successfully:", response);
+      await createAssessment(assessmentData);
+      // console.log("Assessment created successfully:", response);
       toast.success("Your request has been submitted successfully!");
 
       onClose();

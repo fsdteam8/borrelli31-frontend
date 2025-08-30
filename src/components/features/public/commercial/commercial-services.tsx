@@ -5,6 +5,7 @@ import { getRoofingServices } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
+import CommercialServicesSkeleton from "./commercial-services-skeleton";
 
 // --- Types ---
 interface Service {
@@ -43,7 +44,7 @@ export default function CommercialServices() {
     setIsModalOpen(true);
   };
 
-  if(isLoading) return <div>Loading....</div>
+  if(isLoading) return <div><CommercialServicesSkeleton /></div>
   if(isError) return <div>Error ....</div>
  
   return (

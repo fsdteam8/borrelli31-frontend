@@ -3,6 +3,7 @@ import { getRoofingServices } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
+import ServiceCardSkeleton from "./ServiceCardSkeleton";
 
 interface Service {
   _id: string;
@@ -37,7 +38,7 @@ export default function ServiceCard() {
     setIsModalOpen(true);
   };
 
-  if (isLoading) return <div>Loading....</div>;
+  if (isLoading) return <ServiceCardSkeleton />;
   if (isError) return <div>Error ....</div>;
 
   return (

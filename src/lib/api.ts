@@ -299,3 +299,19 @@ export async function createAssessment(data: AssessmentData) {
     throw "Faild assessments Data"
   }
 }
+
+// Update Assessment Status
+export const updateAssessmentStatus = async (
+  assessmentId: string,
+  status: "PENDING" | "COMPLETED"
+) => {
+  try {
+    const res = await api.patch(`/assessments/${assessmentId}/status`, {
+      status,
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Failed to update status:", error);
+    throw error;
+  }
+};

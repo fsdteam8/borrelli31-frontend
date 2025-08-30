@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createAssessment, getRoofingServices } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import React, { useState, useCallback, useMemo } from "react";
+import { toast } from "sonner";
 
 interface FormData {
   fullName: string;
@@ -51,6 +54,18 @@ export default function InquiryForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const {
+    data,
+    // isLoading,
+    // isError,
+  } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => getRoofingServices(),
+    select: (data) => data?.data,
+  });
+
+  console.log(data);
+
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
 
@@ -88,19 +103,25 @@ export default function InquiryForm() {
     [errors]
   );
 
-  const handleSubmit = async (data: FormData) => {
-    // Custom logic for form submission
-    console.log("Custom form submission:", data);
-    // Add your custom API call or processing logic here
-  };
-
-  const handleFormSubmit = useCallback(async () => {
+  const handleFormSubmit = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
 
+    const assessmentData = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      propertyAddress: formData.address,
+      service: formData.service,
+    };
+    // console.log(assessmentData);
+
     try {
-      await handleSubmit(formData);
+      await createAssessment(assessmentData);
+      // console.log("Assessment created successfully:", response);
+      toast.success("Your request has been submitted successfully!");
+      // 🔹 reset form data
       setFormData({
         fullName: "",
         email: "",
@@ -108,13 +129,13 @@ export default function InquiryForm() {
         address: "",
         service: "",
       });
-      setErrors({});
-    } catch (error) {
-      console.error("Submission error:", error);
+    } catch {
+      // console.error("Error creating assessment:", error);
+      toast.error("There was an error submitting your request.");
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, validateForm]);
+  };
 
   const benefitItems = useMemo(
     () =>
@@ -290,7 +311,11 @@ export default function InquiryForm() {
                         <SelectValue placeholder="Select a service" />
                       </SelectTrigger>
                       <SelectContent className="py-3">
-                        {serviceOptions}
+                        {data?.map((item: { _id: string; name: string }) => (
+                          <SelectItem value={item._id} key={item._id}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {errors.service && (
