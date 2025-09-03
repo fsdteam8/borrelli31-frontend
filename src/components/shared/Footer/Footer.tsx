@@ -12,7 +12,7 @@ const Footer = () => {
     // Add your API call or processing logic here
   };
   return (
-    <footer className="bg-[#131313] text-white p-12">
+    <footer className="bg-[#131313] text-white p-6">
       <div className="container mx-auto px-4">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">

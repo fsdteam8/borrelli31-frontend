@@ -1,9 +1,18 @@
-import React from "react";
-import { PhoneCall } from "lucide-react";
+"use client";
+import React, { useState } from "react";
+import { MoveRight, PhoneCall } from "lucide-react";
 import Image from "next/image";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { Button } from "@/components/ui/button";
+import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
 
 const NoMaintenanceModel = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleFormSubmit = async () => {
+    // console.log("Custom form submission:", data);
+    // Add your API call or processing logic here
+  };
+
   return (
     <section className="py-8 lg:py-20 bg-[#0F3D68] text-white">
       <div className="container">
@@ -26,8 +35,8 @@ const NoMaintenanceModel = () => {
               Our No-Maintenance Model
             </h3>
             <p className="text-sm sm:text-base lg:text-lg">
-              &quot;You call, we come!&quot; – It&apos;s that simple. No complicated
-              maintenance contracts or schedules to manage.
+              &quot;You call, we come!&quot; – It&apos;s that simple. No
+              complicated maintenance contracts or schedules to manage.
             </p>
 
             <ul className="space-y-5">
@@ -41,8 +50,8 @@ const NoMaintenanceModel = () => {
                     On-Demand Service
                   </h4>
                   <p className="text-xs sm:text-sm lg:text-lg opacity-70">
-                    Call us when you need us, and we&apos;ll be there within 24–48
-                    hours.
+                    Call us when you need us, and we&apos;ll be there within
+                    24–48 hours.
                   </p>
                 </div>
               </li>
@@ -63,7 +72,21 @@ const NoMaintenanceModel = () => {
                 </div>
               </li>
             </ul>
+
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center space-x-2 h-12 bg-white text-[#0F3D68] w-80 hover:bg-[#F3F4F6] cursor-pointer mx-auto lg:mx-0"
+            >
+              Get a Free Drone Inspection & Estimate <MoveRight />
+            </Button>
           </div>
+
+          {/* Inquiry Modal */}
+          <RoofingInquiryModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={handleFormSubmit}
+          />
         </div>
       </div>
     </section>
