@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import CommercialServicesSkeleton from "./commercial-services-skeleton";
+import image from "../../../../../public/images/image10.png";
 
 // --- Types ---
 interface Service {
@@ -19,7 +20,14 @@ interface Service {
   serviceValue: string;
 }
 
- 
+const commercialRoofing = [
+  "/images/image9.jpg",
+  "/images/image10.png",
+  "/images/image11.jpg",
+  "/images/image12.jpg",
+  "/images/image13.jpg",
+  "/images/image14.jpg",
+];
 
 export default function CommercialServices() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -44,9 +52,14 @@ export default function CommercialServices() {
     setIsModalOpen(true);
   };
 
-  if(isLoading) return <div><CommercialServicesSkeleton /></div>
-  if(isError) return <div>Error ....</div>
- 
+  if (isLoading)
+    return (
+      <div>
+        <CommercialServicesSkeleton />
+      </div>
+    );
+  if (isError) return <div>Error ....</div>;
+
   return (
     <section className="bg-[#F4F4F4] py-8 lg:py-20">
       <div className="text-center mb-10 px-4">
@@ -60,14 +73,14 @@ export default function CommercialServices() {
       </div>
 
       <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredServices?.map((service: Service) => (
+        {filteredServices?.map((service: Service, i: number) => (
           <div
             key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imageUrl || "/images/placeholder.png"}
+                src={commercialRoofing[i] || "/images/placeholder.png"}
                 alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
