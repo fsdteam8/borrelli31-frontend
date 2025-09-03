@@ -82,7 +82,7 @@ export default function PersonalInformation() {
     mutationFn: ({ userId, payload }: { userId: string; payload: Partial<FormData> & { profileImage?: string } }) =>
       userProfileUpdate(userId, payload),
     onSuccess: (data) => {
-      console.log("Profile Updated ✅", data);
+      // console.log("Profile Updated ✅", data);
       setIsEditing(false);
       setOriginalData(formData); // update successful
     },
@@ -104,7 +104,7 @@ export default function PersonalInformation() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file)
+    // console.log(file)
     if (file) {
       setImageFile(file);
       setImageName(file.name); // Store only the file name
@@ -115,7 +115,7 @@ export default function PersonalInformation() {
     e.preventDefault();
     if (!originalData || !userResponse?.data?._id) return;
 
-    console.log(formData)
+    // console.log(formData)
     // Collect updated fields
     const updatedFields: Partial<FormData> & { profileImage?: string } = {};
     (Object.keys(formData) as (keyof FormData)[]).forEach((key) => {
@@ -128,15 +128,15 @@ export default function PersonalInformation() {
       updatedFields.profileImage = imageName; 
     }
 
-    console.log(imageName)
+    // console.log(imageName)
 
     if (Object.keys(updatedFields).length === 0) {
-      console.log("No changes made 🚫");
+      // console.log("No changes made 🚫");
       setIsEditing(false);
       return;
     }
 
-    console.log("Updated Fields to send ✅", updatedFields);
+    // console.log("Updated Fields to send ✅", updatedFields);
 
     // API call
     mutation.mutate({

@@ -44,6 +44,11 @@ export default function ResidentialServices() {
   if (isLoading) return <div><ResidentialServicesSkeleton /></div>;
   if (isError) return <div>Error ....</div>;
 
+  // প্রথম ৩টা service
+  const firstRow = filteredServices?.slice(0, 3) || [];
+  // শেষের ২টা service
+  const secondRow = filteredServices?.slice(3, 5) || [];
+
   return (
     <section className="bg-[#F4F4F4] py-8 lg:py-20">
       <div className="text-center mb-10 px-4">
@@ -56,15 +61,52 @@ export default function ResidentialServices() {
         </p>
       </div>
 
-      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredServices?.map((service: Service) => (
+      {/* First Row - 3 columns */}
+      <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {firstRow.map((service: Service) => (
           <div
             key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imageUrl || "/images/placeholder.png"} // Fallback if image URL is missing
+                src={service.imageUrl || "/images/placeholder.png"}
+                alt={service.name}
+                fill
+                className="object-cover rounded-2xl"
+              />
+            </div>
+            <div className="p-4 space-y-3">
+              <h1 className="text-2xl font-semibold text-[#2A2A2A] mb-1">
+                {service.name}
+              </h1>
+              <div
+                className="text-[#4F4F4F] mb-4"
+                dangerouslySetInnerHTML={{
+                  __html: service.description,
+                }}
+              />
+              <button
+                onClick={() => handleServiceSelect(service._id)}
+                className="bg-[#23547B] hover:bg-[#183c5a] duration-300 text-white px-6 py-2 rounded-md mb-2 cursor-pointer"
+              >
+                {service.btnText}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Second Row - 2 items centered */}
+      <div className="mx-auto container flex flex-wrap justify-center gap-4">
+        {secondRow.map((service: Service) => (
+          <div
+            key={service._id}
+            className="bg-white rounded-3xl shadow-xl overflow-hidden p-4 w-full sm:w-[48%] lg:w-[30%]"
+          >
+            <div className="relative w-full h-64">
+              <Image
+                src={service.imageUrl || "/images/placeholder.png"}
                 alt={service.name}
                 fill
                 className="object-cover rounded-2xl"

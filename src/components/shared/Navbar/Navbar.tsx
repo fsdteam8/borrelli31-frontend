@@ -73,7 +73,7 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Link href="tel:+1234567890">
+            <Link href="tel:+18328885521">
               <Button
                 variant="secondary"
                 className="flex items-center space-x-2 bg-[#0F3D68] text-white hover:bg-[#0F3D68]/90 focus:ring-4 focus:ring-[#0F3D68]/50 py-4 md:px-5 lg:px-6 cursor-pointer h-12 w-[134px]"

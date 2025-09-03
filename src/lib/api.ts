@@ -197,7 +197,7 @@ export async function updateReviewStatus(reviewId: string, status: "Approved") {
         },
       }
     );
-    console.log(res.data);
+    // console.log(res.data);
     return res.data;
   } catch {
     throw "Failed to update review status";

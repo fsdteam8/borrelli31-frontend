@@ -7,19 +7,12 @@ import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 // --- Types ---
-interface FormData {
-  fullName: string;
-  email: string;
-  phone?: string;
-  message?: string;
-  selectedService?: string;
-}
-
+ 
 export default function HomeHero() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const handleFormSubmit = async (data: FormData) => {
-    console.log("Custom form submission:", data);
+  const handleFormSubmit = async ( ) => {
+    // console.log("Custom form submission:", data);
     // Add your API call or processing logic here
   };
 

@@ -1,10 +1,18 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import {   Clock, MoveRight, Shield, StickyNote } from "lucide-react";
+import { Clock, MoveRight, Shield, StickyNote } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
 
+ 
 export default function RsBanner() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleFormSubmit = async () => {
+    // console.log("Custom form submission:", data);
+    // Add your API call or processing logic here
+  };
+
   return (
     <section className="min-h-[calc(100vh-150px)] py-8 lg:py-20 flex items-center justify-center bg-[#0F3D68]">
       <div className="container mx-auto">
@@ -15,21 +23,23 @@ export default function RsBanner() {
               with Quality <span className="text-[#D62D27]">Roofing</span>
             </h2>
             <p className="lg:text-xl text-base">
-              Houston&apos;s trusted roofing experts providing peace of mind through
-              quality craftsmanship, transparent communication, and exceptional
-              service.
+              Houston&apos;s trusted roofing experts providing peace of mind
+              through quality craftsmanship, transparent communication, and
+              exceptional service.
             </p>
-            <Link href="/">
-              <Button className="flex items-center space-x-2 h-12 bg-white text-[#0F3D68] w-80 hover:bg-[#F3F4F6] cursor-pointer mx-auto lg:mx-0">
-                Get a Free Drone Inspection & Estimate <MoveRight />
-              </Button>
-            </Link>
+
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center space-x-2 h-12 bg-white text-[#0F3D68] w-80 hover:bg-[#F3F4F6] cursor-pointer mx-auto lg:mx-0"
+            >
+              Get a Free Drone Inspection & Estimate <MoveRight />
+            </Button>
           </div>
           <Image
-            src="/images/cs-banner.jpg"
+            src="/images/HeroImage22.png"
             alt="Commercial Roofing Banner"
-            width={1000}
-            height={1000}
+            width={900}
+            height={900}
             className="w-full aspect-[5/4] rounded-lg object-cover"
           />
         </div>
@@ -71,6 +81,13 @@ export default function RsBanner() {
             </div>
           </div>
         </div>
+
+        {/* Inquiry Modal */}
+        <RoofingInquiryModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleFormSubmit}
+        />
       </div>
     </section>
   );
