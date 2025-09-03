@@ -4,8 +4,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Drone, FileText, MoveRight } from "lucide-react";
 import React, { useState } from "react";
 import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
+import { useQuery } from "@tanstack/react-query";
+import { getRoofingServices } from "@/lib/api";
+
+interface Service {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  btnText: string;
+  imageUrl: string;
+  serviceValue: string;
+}
 
 export default function HomeOwners() {
+  const {
+    data: Residential,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["roofing"],
+    queryFn: () => getRoofingServices(),
+  });
+
+  const filteredServices: Service[] =
+    Residential?.data
+      ?.filter((service: Service) => service.category === "Offers")
+      .reverse() || [];
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [preselectedService, setPreselectedService] = useState<string>("");
 
@@ -14,8 +40,30 @@ export default function HomeOwners() {
     setIsModalOpen(true);
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading services...</div>;
+
+  // Features for 2 different cards
+  const featuresList = [
+    [
+      "High-resolution imagery of your entire roof system",
+      "Detailed documentation of any damage or wear",
+      "Professional assessment and recommendations",
+    ],
+    [
+      "Official certification of roof condition and expected lifespan",
+      "Documentation for insurance and mortgage approval",
+      "Recommendations for repairs to maximize sale value",
+    ],
+  ];
+
+  const featuresDescription = [
+    "Our cutting-edge drone technology provides a detailed assessment of your roof's condition without the need for ladder climbs or walking on your roof. This non-invasive approach gives you:",
+    "Perfect for realtors and home sellers, our roof certification service provides the documentation you need to complete your real estate transaction with confidence:",
+  ];
+
   return (
-    <section className="bg-[#E7E7E78F] py-8 lg:py-20">
+    <section className="bg-[#E7E7E78F] py-8 lg:py-16">
       <div className="container">
         <div className="mt-20">
           <div className="text-center max-w-lg mx-auto space-y-2 lg:mb-12">
@@ -27,97 +75,54 @@ export default function HomeOwners() {
               provide peace of mind and exceptional value.
             </p>
           </div>
-          <div className="flex flex-col md:flex-row  justify-between items-center gap-8 ">
-            <Card className="shadow-[0px_4px_32px_0px_#00000014] p-0 rounded-md">
-              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3  px-4">
-                <Drone className="h-8 w-8" />
-                <CardTitle className="lg:text-5xl text-xl font-bold">
-                  Free Drone Inspections
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="lg:space-y-10 pb-6 pr-16  px-4">
-                <p className="lg:text-lg text-sm">
-                  Our cutting-edge drone technology provides a detailed
-                  assessment of your roof&apos;s condition without the need for
-                  ladder climbs or walking on your roof. This non-invasive
-                  approach gives you:
-                </p>
-                <ul className="space-y-5 text-sm">
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      High-resolution imagery of your entire roof system
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      Detailed documentation of any damage or wear
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      Professional assessment and recommendations
-                    </span>
-                  </li>
-                </ul>
-                <Button
-                  onClick={() => handleServiceSelect("")}
-                  className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0"
-                >
-                  Get a Free Drone Inspection & Estimate <MoveRight />
-                </Button>
-              </CardContent>
-            </Card>
 
-            <Card className="shadow-[0px_4px_32px_0px_#00000014] p-0 rounded-md">
-              <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3  px-4">
-                <FileText className="h-8 w-8" />
-                <CardTitle className="lg:text-5xl text-xl font-bold">
-                  Sale-Ready Certifications
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="lg:space-y-10 pb-6 pr-16   px-4">
-                <p className="lg:text-lg text-sm">
-                  Perfect for realtors and home sellers, our roof certification
-                  service provides the documentation you need to complete your
-                  real estate transaction with confidence:
-                </p>
-                <ul className="space-y-5 text-sm">
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      Official certification of roof condition and expected
-                      lifespan
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      Documentation for insurance and mortgage approval
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
-                    <span className="lg:text-lg text-sm">
-                      Recommendations for repairs to maximize sale value
-                    </span>
-                  </li>
-                </ul>
-                <Button
-                  onClick={() => handleServiceSelect("")}
-                  className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-80 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0"
-                >
-                  Request Certification <MoveRight />
-                </Button>
-              </CardContent>
-            </Card>
+          <div className="flex flex-col md:flex-row justify-between items-stretch gap-8">
+            {filteredServices.map((service, index) => (
+              <Card
+                key={service._id}
+                className="shadow-[0px_4px_32px_0px_#00000014] p-0 rounded-md flex-1"
+              >
+                <CardHeader className="bg-[#0F3D68] text-white rounded-t-md py-5 space-y-3 px-4">
+                  {index === 0 ? (
+                    <Drone className="h-8 w-8" />
+                  ) : (
+                    <FileText className="h-8 w-8" />
+                  )}
+                  <CardTitle className="lg:text-3xl text-xl font-bold">
+                    {service.name}
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="lg:space-y-10 pb-6 pr-6 px-4">
+                  {/* description index অনুযায়ী */}
+                  <p className="text-[#424242] text-[18px]">
+                    {featuresDescription[index]}
+                  </p>
+
+                  {/* আলাদা features দেখাচ্ছি */}
+                  <ul className="space-y-5 text-sm mt-2">
+                    {featuresList[index]?.map((feature, i) => (
+                      <li key={i} className="flex items-center space-x-2">
+                        <Check className="lg:w-7 w-4 lg:h-7 h-4 bg-[#DBEAFE] rounded-full p-1.5 text-[#1D4ED8]" />
+                        <span className="lg:text-lg text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    onClick={() => handleServiceSelect(service._id)}
+                    className="flex items-center space-x-2 h-12 bg-[#0F3D68] text-white w-72 hover:bg-[#0F3D68] cursor-pointer mx-auto lg:mx-0 mt-6"
+                  >
+                    {service.btnText} <MoveRight />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
-          {/* Modal for inquiry form */}
           <RoofingInquiryModal
             isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
             preselectedService={preselectedService}
           />
         </div>

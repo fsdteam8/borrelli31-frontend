@@ -12,7 +12,7 @@ interface Service {
   description: string;
   btnText: string;
   imageUrl: string;
-  serviceValue: string; // Adjust this based on the API response structure
+  serviceValue: string; 
 }
 
 export default function ServiceCard() {
@@ -61,7 +61,7 @@ export default function ServiceCard() {
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imageUrl || "/images/placeholder.png"} // Use the image URL from the API, or a placeholder if it's missing
+                src={service.imageUrl || "/images/placeholder.png"}  
                 alt={service.name}
                 fill
                 className="object-cover rounded-2xl"

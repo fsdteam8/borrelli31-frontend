@@ -44,7 +44,7 @@ export default function GetInTouch() {
     try {
       // Call the API
       const response = await createMessages(values as MessagePayload);
-      console.log("Message created:", response);
+      // console.log("Message created:", response);
 
       // Optional: reset form after submission
       form.reset();
@@ -98,7 +98,12 @@ export default function GetInTouch() {
             </svg>
             <div>
               <h2 className="font-semibold text-[#000]">Email</h2>
-              <p className="text-[#4B5563] text-base">cb@borrelliroofing.com</p>
+              <a href="mailto:cb@borrelliroofing.com">
+                {" "}
+                <p className="text-[#4B5563] text-base cursor-pointer hover:underline hover:text-[#0F3D68]">
+                  cb@borrelliroofing.com
+                </p>
+              </a>
             </div>
           </div>
 
@@ -121,7 +126,11 @@ export default function GetInTouch() {
             </svg>
             <div>
               <h2 className="font-semibold text-[#000]">Phone</h2>
-              <p className="text-[#4B5563] text-base">(832) 888-5521</p>
+              <a href="tel:+18328885521">
+                <p className="text-[#4B5563] text-base cursor-pointer hover:underline hover:text-[#0F3D68]">
+                  (832) 888-5521
+                </p>
+              </a>
             </div>
           </div>
 
@@ -259,7 +268,10 @@ export default function GetInTouch() {
                 )}
               />
 
-              <Button type="submit" className="w-full bg-[#0F3D68] text-white cursor-pointer">
+              <Button
+                type="submit"
+                className="w-full bg-[#0F3D68] text-white cursor-pointer"
+              >
                 Send Message
               </Button>
             </form>

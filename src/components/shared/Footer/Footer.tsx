@@ -1,6 +1,16 @@
+"use client";
+import RoofingInquiryModal from "@/components/features/public/Home/roofing-inquiry-modal";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
+ 
 const Footer = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleFormSubmit = async ( ) => {
+    // console.log("Custom form submission:", data);
+    // Add your API call or processing logic here
+  };
   return (
     <footer className="bg-[#131313] text-white p-12">
       <div className="container mx-auto px-4">
@@ -20,7 +30,10 @@ const Footer = () => {
               <br />
               commercial projects.
             </p>
-            <button className="bg-[#0F3D68] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#0d3356] transition cursor-pointer">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#0F3D68] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#0d3356] transition cursor-pointer"
+            >
               Schedule My Inspection
             </button>
           </div>
@@ -47,7 +60,7 @@ const Footer = () => {
                   />
                 </svg>
               </span>{" "}
-              (832) 888-5521
+              <a href="tel:+18328885521">(832) 888-5521</a>
             </p>
             <p className="flex items-center gap-2 text-[#FFF]/75 text-sm cursor-pointer hover:underline">
               <span>
@@ -75,7 +88,7 @@ const Footer = () => {
                   />
                 </svg>
               </span>{" "}
-              cb@borrelliroofing.com
+              <a href="mailto:cb@borrelliroofing.com">cb@borrelliroofing.com</a>
             </p>
             <p className="flex items-center gap-2 text-[#FFF]/75 text-sm cursor-pointer hover:underline">
               <span>
@@ -104,26 +117,43 @@ const Footer = () => {
                     </clipPath>
                   </defs>
                 </svg>
-              </span>{" "}
-              www.borrelliroofing.com
+              </span>
+              <a
+                href="https://www.borrelliroofing.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                www.borrelliroofing.com
+              </a>
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="md:col-span-3 space-y-3">
             <h1 className="text-lg font-semibold text-white">Quick Links</h1>
-            <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
+            {/* <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
               Commercial Roofing Services
-            </p>
-            <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
-              Retail Media Network
-            </p>
-            <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
-              Residential Roofing Services
-            </p>
-            <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
-              About Borrelli Roofing
-            </p>
+            </p> */}
+            <Link href={"/"}>
+              <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
+                Home
+              </p>
+            </Link>
+            <Link href={"/commercial-services"}>
+              <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
+                Commercial Roofing Services
+              </p>
+            </Link>
+            <Link href={"/residential-services"}>
+              <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
+                Residential Roofing Services
+              </p>
+            </Link>
+            <Link href={"/about-borrelli-roofing"}>
+              <p className="text-[#FFF]/80 text-sm cursor-pointer hover:underline">
+                About Borrelli Roofing
+              </p>
+            </Link>
           </div>
         </div>
 
@@ -141,6 +171,13 @@ const Footer = () => {
             </span>
           </div>
         </div>
+
+        {/* Inquiry Modal */}
+        <RoofingInquiryModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleFormSubmit}
+        />
       </div>
     </footer>
   );

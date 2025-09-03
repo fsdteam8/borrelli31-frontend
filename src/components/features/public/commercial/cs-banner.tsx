@@ -1,16 +1,24 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
 
+ 
 export default function CommercialBanner() {
   const features = [
     "Minimal business disruption during installation and repairs",
     "Comprehensive safety protocols for every project",
     "Advanced drone documentation and inspection",
   ];
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleFormSubmit = async () => {
+    // console.log("Custom form submission:", data);
+    // Add your API call or processing logic here
+  };
 
   return (
     <section className="min-h-[calc(100vh-150px)] flex items-center justify-center bg-[#0F3D68] py-10 lg:py-0">
@@ -34,11 +42,13 @@ export default function CommercialBanner() {
                 </li>
               ))}
             </ul>
-            <Link href="/">
-              <Button className="flex items-center space-x-2 h-12 bg-white text-[#0F3D68] w-80 hover:bg-[#F3F4F6] cursor-pointer mx-auto lg:mx-0">
-                Get a Free Drone Inspection & Estimate <MoveRight />
-              </Button>
-            </Link>
+
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center space-x-2 h-12 bg-white text-[#0F3D68] w-80 hover:bg-[#F3F4F6] cursor-pointer mx-auto lg:mx-0"
+            >
+              Get a Free Drone Inspection & Estimate <MoveRight />
+            </Button>
           </div>
           <Image
             src="/images/cs-banner.jpg"
@@ -48,6 +58,13 @@ export default function CommercialBanner() {
             className="w-full aspect-[5/4] rounded-lg object-cover"
           />
         </div>
+
+        {/* Inquiry Modal */}
+        <RoofingInquiryModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleFormSubmit}
+        />
       </div>
     </section>
   );

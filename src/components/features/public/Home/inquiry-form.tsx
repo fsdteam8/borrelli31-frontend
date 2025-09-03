@@ -56,7 +56,7 @@ export default function InquiryForm() {
     select: (data) => data?.data,
   });
 
-  console.log(data);
+  // console.log(data);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};

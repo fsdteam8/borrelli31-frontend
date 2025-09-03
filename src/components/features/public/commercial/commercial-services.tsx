@@ -68,7 +68,7 @@ export default function CommercialServices() {
             <div className="relative w-full h-64">
               <Image
                 src={service.imageUrl || "/images/placeholder.png"}
-                alt={service.alt}
+                alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
               />

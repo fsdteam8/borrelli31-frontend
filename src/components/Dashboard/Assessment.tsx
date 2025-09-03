@@ -180,7 +180,7 @@ export default function Assessment() {
     status: "COMPLETED" | "PENDING"
   ) => {
     try {
-      console.log(id);
+      // console.log(id);
       await updateAssessmentStatus(id, status);
 
       const updated = assessments.map((a) =>
