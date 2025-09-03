@@ -6,7 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import CommercialServicesSkeleton from "./commercial-services-skeleton";
-import image from "../../../../../public/images/image10.png";
+import image9 from "../../../../../public/images/image9.jpg";
+import image10 from "../../../../../public/images/image10.png";
+import image11 from "../../../../../public/images/image11.jpg";
+import image12 from "../../../../../public/images/image12.jpg";
+import image13 from "../../../../../public/images/image13.jpg";
+import image14 from "../../../../../public/images/image14.jpg";
 
 // --- Types ---
 interface Service {
@@ -21,12 +26,12 @@ interface Service {
 }
 
 const commercialRoofing = [
-  "/images/image9.jpg",
-  "/images/image10.png",
-  "/images/image11.jpg",
-  "/images/image12.jpg",
-  "/images/image13.jpg",
-  "/images/image14.jpg",
+  image9,
+  image10,
+  image11,
+  image12,
+  image13,
+  image14,
 ];
 
 export default function CommercialServices() {
