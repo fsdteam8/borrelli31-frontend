@@ -4,6 +4,7 @@ import { Clock, MoveRight, Shield, StickyNote } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import RoofingInquiryModal from "../Home/roofing-inquiry-modal";
+import image22 from "../../../../../public/images/HeroImage22.png";
 
  
 export default function RsBanner() {
@@ -36,7 +37,7 @@ export default function RsBanner() {
             </Button>
           </div>
           <Image
-            src="/images/HeroImage22.png"
+            src={image22}
             alt="Commercial Roofing Banner"
             width={900}
             height={900}

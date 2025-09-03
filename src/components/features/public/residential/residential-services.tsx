@@ -6,6 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import ResidentialServicesSkeleton from "./residential-services-skeleton";
+import image23 from "../../../../../public/images/image23.jpg";
+import image24 from "../../../../../public/images/image24.jpg";
+import image25 from "../../../../../public/images/image25.png";
+import image26 from "../../../../../public/images/image26.jpg";
+import image27 from "../../../../../public/images/image27.jpg";
+
 
 // --- Types ---
 interface Service {
@@ -17,6 +23,16 @@ interface Service {
   imageUrl: string;
   serviceValue: string;
 }
+
+const commercialRoofing = [
+  image23,
+  image24,
+  image25,
+  image26,
+  image26,
+  image27,
+];
+
 
 export default function ResidentialServices() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -63,14 +79,14 @@ export default function ResidentialServices() {
 
       {/* First Row - 3 columns */}
       <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {firstRow.map((service: Service) => (
+        {firstRow.map((service: Service, i: number) => (
           <div
             key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
               <Image
-                src={service.imageUrl || "/images/placeholder.png"}
+                src={commercialRoofing[i] || "/images/placeholder.png"}
                 alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
