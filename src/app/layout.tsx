@@ -14,7 +14,7 @@ const manrope = Manrope({
 // You can change this to your custom favicon icon, title and description
 export const metadata = {
   title: "Smarter Roofing Services",
-  description: `Houston’s Trusted Roofing Partner for Residential & Commercial Projects`,
+  description: `Houston Roofing Solutions – Quality Residential & Commercial Roof Services`,
   icons: {
     icon: "/Borrelli_Logo.svg",
   },
