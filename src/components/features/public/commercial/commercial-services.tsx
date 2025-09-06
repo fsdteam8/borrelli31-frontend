@@ -6,13 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import CommercialServicesSkeleton from "./commercial-services-skeleton";
-import image9 from "../../../../../public/images/image9.jpg";
-import image10 from "../../../../../public/images/image10.png";
-import image11 from "../../../../../public/images/image11.jpg";
-import image12 from "../../../../../public/images/image12.jpg";
-import image13 from "../../../../../public/images/image13.jpg";
-import image14 from "../../../../../public/images/image14.jpg";
-
+ 
 // --- Types ---
 interface Service {
   _id: string;
@@ -25,14 +19,7 @@ interface Service {
   serviceValue: string;
 }
 
-const commercialRoofing = [
-  image9,
-  image10,
-  image11,
-  image12,
-  image13,
-  image14,
-];
+ 
 
 export default function CommercialServices() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -84,8 +71,14 @@ export default function CommercialServices() {
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"
           >
             <div className="relative w-full h-64">
-              <Image
+              {/* <Image
                 src={commercialRoofing[i] || "/images/placeholder.png"}
+                alt={service.name}
+                fill
+                className="object-cover rounded-2xl"
+              /> */}
+              <Image
+                src={service.imageUrl || "/images/placeholder.png"}
                 alt={service.name}
                 fill
                 className="object-cover rounded-2xl"
