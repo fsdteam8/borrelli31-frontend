@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import ResidentialServicesSkeleton from "./residential-services-skeleton";
  
 
-// --- Types ---
+// --- Types --- comment
 interface Service {
   _id: string;
   name: string;
