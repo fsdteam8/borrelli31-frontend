@@ -34,7 +34,7 @@ export default function ResidentialServices() {
     queryFn: () => getRoofingServices(),
   });
 
-  // Filter services based on the "Residential" category and reverse the order
+  // Filter services based on the "Residential" category and reverse the order a
   const filteredServices = Residential?.data
     ?.filter((service: Service) => service.category === "Residential")
     .reverse();
