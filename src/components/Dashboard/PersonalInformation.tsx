@@ -81,7 +81,7 @@ export default function PersonalInformation() {
   const mutation = useMutation({
     mutationFn: ({ userId, payload }: { userId: string; payload: Partial<FormData> & { profileImage?: string } }) =>
       userProfileUpdate(userId, payload),
-    onSuccess: (data) => {
+    onSuccess: () => {
       // console.log("Profile Updated ✅", data);
       setIsEditing(false);
       setOriginalData(formData); // update successful

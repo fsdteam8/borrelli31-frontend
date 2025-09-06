@@ -65,7 +65,7 @@ export default function CommercialServices() {
       </div>
 
       <div className="mx-auto container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredServices?.map((service: Service, i: number) => (
+        {filteredServices?.map((service: Service) => (
           <div
             key={service._id}
             className="bg-white rounded-3xl shadow-xl overflow-hidden p-4"

@@ -43,7 +43,7 @@ export default function GetInTouch() {
   const onSubmit = async (values: FormValues) => {
     try {
       // Call the API
-      const response = await createMessages(values as MessagePayload);
+       await createMessages(values as MessagePayload);
       // console.log("Message created:", response);
 
       // Optional: reset form after submission
